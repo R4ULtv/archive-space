@@ -65,7 +65,10 @@ export default async function Login() {
               GitHub
             </a>
             . If you need more information you can check out my{" "}
-            <a href="https://www.raulcarini.dev/blog" className="font-semibold">
+            <a
+              href="https://www.raulcarini.dev/blog/archive-space"
+              className="font-semibold"
+            >
               blog post
             </a>
             .
@@ -80,7 +83,7 @@ export default async function Login() {
         </div>
       </div>
 
-      <ShootingStars/>
+      <ShootingStars />
       <StarsBackground />
     </>
   );
