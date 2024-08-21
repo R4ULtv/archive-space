@@ -5,7 +5,7 @@ import { signIn, auth } from "@/lib/auth";
 import { StarsBackground } from "@/components/layout/stars-background";
 import { ShootingStars } from "@/components/layout/shooting-stars";
 
-export default async function Login() {
+export default async function Login({ searchParams }) {
   const session = await auth();
 
   if (session) {
@@ -27,7 +27,27 @@ export default async function Login() {
           Archive Space
         </h1>
 
-        <form action={handleLogin} className="mt-6">
+        <form
+          action={handleLogin}
+          className="mt-6 flex flex-col items-center justify-center"
+        >
+          {searchParams.error && (
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-1">
+              Something went wrong.
+            </p>
+          )}
+          {searchParams.error &&
+            searchParams.error === "RetrieveAccessEmails" && (
+              <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-1">
+                Failed to retrieve access emails.
+              </p>
+            )}
+          {searchParams.error && searchParams.error === "NotAuthorized" && (
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-1">
+              You are not authorized to access this website.
+            </p>
+          )}
+
           <Button
             type="submit"
             className="bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-md flex gap-2 items-center hover:bg-zinc-300/75 dark:hover:bg-zinc-700/75 duration-150"
@@ -50,7 +70,7 @@ export default async function Login() {
             This website is a private archive space for{" "}
             <span className="font-semibold">specific users</span>. Make sure you
             have the <span className="font-semibold">permission</span> to access
-            our website with your GitHub account. If you don't already have an
+            this website with your GitHub account. If you don't already have an
             account, <span className="font-semibold">you can't create one</span>
             .
           </p>
