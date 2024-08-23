@@ -22,7 +22,6 @@ export async function FilesList({ tag, category }) {
     .collection("files")
     .find(query)
     .sort({ uploadedAt: -1 })
-    .limit(category)
     .toArray();
 
   const categories = await getCategories()
