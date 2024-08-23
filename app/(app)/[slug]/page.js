@@ -7,7 +7,7 @@ import { TagsGrid, TagsGridLoading } from "@/components/TagsGrid";
 import getCategories from "@/utils/getCategories";
 
 export async function generateStaticParams() {
-  const categories = await getCategories({ formatted: false });
+  const categories = await getCategories(false);
 
   return categories.map((category) => ({
     slug: category,
@@ -15,7 +15,7 @@ export async function generateStaticParams() {
 }
 
 export default async function Blog({ params, searchParams }) {
-  const category = await getCategories({ formatted: false });
+  const category = await getCategories(false);
 
   if (!category.includes(params.slug)) {
     notFound();
