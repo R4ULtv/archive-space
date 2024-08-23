@@ -9,17 +9,23 @@ import DownloadButton from "@/components/client/DownloadButton";
 import DeleteButton from "@/components/client/DeleteButton";
 import numeral from "numeral";
 import EditButton from "@/components/client/EditButton";
+import getCategories from "@/utils/getCategories";
 
-export async function FilesList({ tag }) {
+export async function FilesList({ tag, category }) {
   const client = await clientPromise;
-  const db = client.db("tests");
+  const db = client.db("production");
+
+  const query = tag ? { tags: tag } : {};
+  if (category) query.category = category;
+
   const files = await db
     .collection("files")
-    .find(tag && { tags: tag })
+    .find(query)
     .sort({ uploadedAt: -1 })
+    .limit(category)
     .toArray();
 
-  const categories = await db.collection("files").distinct("category");
+  const categories = await getCategories()
 
   return (
     <div>
@@ -60,7 +66,7 @@ export async function FilesList({ tag }) {
           <div className="flex items-center justify-center gap-1">
             <EditButton
               fileName={file.name}
-              category={file.category}
+              category={file.category.charAt(0).toUpperCase() + file.category.slice(1)}
               categories={categories}
               oldTags={file.tags}
             />
