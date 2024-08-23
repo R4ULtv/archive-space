@@ -1,10 +1,10 @@
 import clientPromise from "@/lib/mongodb";
 import Tags from "./Tags";
 
-export async function TagsGrid({ tag }) {
+export async function TagsGrid({ tag, category }) {
   const client = await clientPromise;
-  const db = client.db("tests");
-  const tags = await db.collection("files").distinct("tags");
+  const db = client.db("production");
+  const tags = await db.collection("files").distinct("tags", { category });
 
   return <Tags tags={tags} tag={tag} />;
 }
