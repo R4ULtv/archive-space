@@ -25,12 +25,12 @@ export const POST = auth(async function POST(request) {
 
     if (result.success) {
       const client = await clientPromise;
-      const db = client.db("tests");
+      const db = client.db("production");
       const fileRecord = await db.collection("files").insertOne({
         name: file.name,
         type: file.type,
         size: file.size,
-        category: "Uncategorized",
+        category: "uncategorized",
         tags: [],
         lastModified: new Date(parseInt(lastModified)),
         uploadedAt: new Date(file.lastModified),
