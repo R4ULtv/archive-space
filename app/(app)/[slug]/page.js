@@ -6,14 +6,6 @@ import { FilesList, FilesListLoading } from "@/components/FilesList";
 import { TagsGrid, TagsGridLoading } from "@/components/TagsGrid";
 import getCategories from "@/utils/getCategories";
 
-export async function generateStaticParams() {
-  const categories = await getCategories(false);
-
-  return categories.map((category) => ({
-    slug: category,
-  }));
-}
-
 export default async function Blog({ params, searchParams }) {
   const category = await getCategories(false);
 
