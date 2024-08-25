@@ -1,5 +1,5 @@
 import clientPromise from "@/lib/mongodb";
-import Tags from "./Tags";
+import Tags from "@/components/client/Tags";
 
 export async function TagsGrid({ tag, category }) {
   const client = await clientPromise;

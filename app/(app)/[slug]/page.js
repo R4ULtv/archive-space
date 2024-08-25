@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import SearchBar from "@/components/client/SearchBar";
 import { FilesList, FilesListLoading } from "@/components/FilesList";
-import { TagsGrid, TagsGridLoading } from "@/components/TagsGrid";
+import { TagsGrid, TagsGridLoading } from "@/components/server/TagsGrid";
 import getCategories from "@/utils/getCategories";
 
 export default async function Blog({ params, searchParams }) {
