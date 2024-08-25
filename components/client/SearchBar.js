@@ -69,6 +69,7 @@ const SearchBar = () => {
       ...recentSearches.filter((s) => s !== searchText),
     ].slice(0, 5);
     localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+    setRecentSearches(updatedSearches);
   };
 
   const handleChanges = (value) => {
