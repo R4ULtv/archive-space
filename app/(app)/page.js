@@ -9,7 +9,7 @@ export default function Home({ searchParams }) {
   return (
     <>
       <div className="space-y-4 mt-4">
-        <UploadButton />
+        <UploadButton fetchURL={process.env.WORKER_URL}/>
         <SearchBar />
         <Suspense fallback={<FilesListLoading />}>
           <FilesList tag={searchParams.tag} />
