@@ -20,10 +20,11 @@ import {
   PencilSquareIcon,
 } from "@heroicons/react/20/solid";
 import { useState } from "react";
-import EditFile from "@/components/server/EditFile";
 import { XMarkIcon } from "@heroicons/react/16/solid";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+
+import EditFile from "@/components/server/EditFile";
 import LoadingCircle from "@/components/LoadingCircle";
 
 export default function EditButton({
@@ -41,6 +42,7 @@ export default function EditButton({
   const [inputValue, setInputValue] = useState("");
   const [tags, setTags] = useState(oldTags || []);
 
+  // Filter categories based on query input
   const filteredCategories =
     query === ""
       ? categories
@@ -50,10 +52,7 @@ export default function EditButton({
 
   const handleCategoryChange = (value) => {
     if (!categories.includes(value)) {
-      // Add new category logic here
-      // For now, we'll just add it to the local state
       setSelectedCategory(value);
-      // You might want to update the categories list in the parent component or global state
     } else {
       setSelectedCategory(value);
     }
@@ -79,6 +78,7 @@ export default function EditButton({
     setInputValue(e.target.value);
   };
 
+  // Handle key events for tag input
   const handleKeyDown = (e) => {
     if (e.key === "Backspace" && inputValue === "" && tags.length > 0) {
       setInputValue(tags[tags.length - 1]);
@@ -102,6 +102,7 @@ export default function EditButton({
     }
   };
 
+  // Remove a tag by index
   const removeTag = (indexToRemove) => {
     setTags(tags.filter((_, index) => index !== indexToRemove));
   };
