@@ -16,7 +16,7 @@ export async function ProgressBar() {
     ])
     .toArray();
   const totalSize = totalBytes[0]?.totalSize || 0;
-  const maxSize = 5e9; // Max 5GB on Cloudflare R2 free plan
+  const maxSize = 1e10; // Max 10GB on Cloudflare R2 free plan
   const progress = (totalSize / maxSize) * 100;
 
   return (
