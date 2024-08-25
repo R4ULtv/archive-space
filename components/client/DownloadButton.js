@@ -4,18 +4,29 @@ import { useState } from "react";
 import { Button } from "@headlessui/react";
 import { ArrowDownTrayIcon } from "@heroicons/react/20/solid";
 import { toast } from "sonner";
-import LoadingCircle from "@/components/LoadingCircle";
 
-export default function DownloadButton({ fileName }) {
+import LoadingCircle from "@/components/LoadingCircle";
+import TokenGenerator from "@/components/server/TokenGenerator";
+
+export default function DownloadButton({ fileName, fetchURL }) {
   const [loading, setLoading] = useState(false);
 
   const onSubmitDownload = async (e) => {
     setLoading(true);
     try {
+      const token = await TokenGenerator({
+        fileName: encodeURIComponent(fileName),
+        type: "download",
+      });
+
       const response = await fetch(
-        `/api/download?${new URLSearchParams("fileName=" + fileName)}`,
+        `${fetchURL}/${encodeURIComponent(fileName)}`,
         {
           method: "GET",
+          mode: "cors",
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token in the request headers
+          },
         }
       );
 
@@ -25,13 +36,9 @@ export default function DownloadButton({ fileName }) {
         });
       }
 
-      // Create a blob from the response
       const blob = await response.blob();
-
-      // Create a temporary URL for the blob
       const url = window.URL.createObjectURL(blob);
 
-      // Create a temporary anchor element and trigger download
       const a = document.createElement("a");
       a.style.display = "none";
       a.href = url;
@@ -39,7 +46,6 @@ export default function DownloadButton({ fileName }) {
       document.body.appendChild(a);
       a.click();
 
-      // Clean up
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
