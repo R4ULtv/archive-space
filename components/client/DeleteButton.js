@@ -20,20 +20,21 @@ export default function DeleteButton({ fileName }) {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const onSubmitDelete = async (e) => {
+  const onSubmitDelete = async () => {
     setIsOpen(false);
     setLoading(true);
 
-    const res = await DeleteFile(fileName);
+    const res = await DeleteFile(encodeURIComponent(fileName));
     if (res) {
-      setLoading(false);
       if (res.error) {
         toast.error("Something went wrong.", {
           description: res.error,
         });
+      } else {
+        router.refresh(); // Refresh the router if deletion was successful
       }
-      router.refresh();
     }
+    setLoading(false);
   };
 
   return (
