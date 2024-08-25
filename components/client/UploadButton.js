@@ -48,7 +48,6 @@ export default function UploadButton({ fetchURL }) {
   const uploadFile = async (file, token) => {
     // Determine chunk size based on file size
     const chunkSize = calculateChunkSize(file.size);
-    console.log(chunkSize);
 
     const totalChunks = Math.ceil(file.size / chunkSize);
     const uploadedParts = [];
@@ -98,7 +97,7 @@ export default function UploadButton({ fetchURL }) {
 
       setFileProgress((prev) => ({
         ...prev,
-        [file.name]: (i / totalChunks) * 100,
+        [file.name]: (i / totalChunks) * 80 + 10, // from 10 to 90
       }));
     }
 
@@ -166,6 +165,10 @@ export default function UploadButton({ fetchURL }) {
           fileName: encodeURIComponent(file.name),
           type: "upload",
         });
+        if (token) {
+          setFileProgress((prev) => ({ ...prev, [file.name]: 10 }));
+        }
+
         const result = await uploadFile(file, token);
         if (result) {
           setFileProgress((prev) => ({ ...prev, [file.name]: 90 }));
