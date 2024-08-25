@@ -5,6 +5,8 @@ import { signIn, auth } from "@/lib/auth";
 import { StarsBackground } from "@/components/layout/stars-background";
 import { ShootingStars } from "@/components/layout/shooting-stars";
 
+export const runtime = "edge"
+
 export default async function Login({ searchParams }) {
   const session = await auth();
 
