@@ -22,6 +22,7 @@ export async function FilesList({ tag, category }) {
     .collection("files")
     .find(query)
     .sort({ uploadedAt: -1 })
+    .limit(category ? 100 : 5)
     .toArray();
 
   const categories = await getCategories();
@@ -79,6 +80,11 @@ export async function FilesList({ tag, category }) {
           </div>
         </div>
       ))}
+      {!category && (
+        <div className="text-sm text-center text-zinc-600 dark:text-zinc-400 tracking-wide">
+          ·····
+        </div>
+      )}
     </div>
   );
 }
