@@ -24,7 +24,7 @@ export async function FilesList({ tag, category }) {
     .sort({ uploadedAt: -1 })
     .toArray();
 
-  const categories = await getCategories()
+  const categories = await getCategories();
 
   return (
     <div>
@@ -65,12 +65,17 @@ export async function FilesList({ tag, category }) {
           <div className="flex items-center justify-center gap-1">
             <EditButton
               fileName={file.name}
-              category={file.category.charAt(0).toUpperCase() + file.category.slice(1)}
+              category={
+                file.category.charAt(0).toUpperCase() + file.category.slice(1)
+              }
               categories={categories}
               oldTags={file.tags}
             />
             <DeleteButton fileName={file.name} />
-            <DownloadButton fileName={file.name} />
+            <DownloadButton
+              fileName={file.name}
+              fetchURL={process.env.WORKER_URL}
+            />
           </div>
         </div>
       ))}
