@@ -9,7 +9,7 @@ import clientPromise from "@/lib/mongodb";
 export async function DeleteFile(fileName) {
   const session = await auth();
   if (!session) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    return { message: "Unauthorized" };
   }
 
   const command = new DeleteObjectCommand({
@@ -28,7 +28,9 @@ export async function DeleteFile(fileName) {
     const result = await db.collection("files").deleteOne({ name: fileName });
 
     if (result.deletedCount === 0) {
-      return { error: "The record in the database was not deleted successfully." };
+      return {
+        error: "The record in the database was not deleted successfully.",
+      };
     }
     return { message: "File deleted successfully" };
   } catch (error) {
