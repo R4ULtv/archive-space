@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import {
   ArrowTopRightOnSquareIcon,
   MagnifyingGlassIcon,
   XMarkIcon,
   ArrowRightCircleIcon,
 } from "@heroicons/react/20/solid";
-import { useDebounce } from "use-debounce";
 import {
   Combobox,
   ComboboxButton,
@@ -18,10 +16,14 @@ import {
   DialogBackdrop,
   DialogPanel,
 } from "@headlessui/react";
-import SearchFiles from "@/components/server/SearchFiles";
-import LoadingCircle from "../LoadingCircle";
+
+import { useState, useEffect } from "react";
+import { useDebounce } from "use-debounce";
 import numeral from "numeral";
 import Link from "next/link";
+
+import SearchFiles from "@/components/server/SearchFiles";
+import LoadingCircle from "@/components/LoadingCircle";
 import DeleteButton from "@/components/client/DeleteButton";
 import DownloadButton from "@/components/client/DownloadButton";
 
