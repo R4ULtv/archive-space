@@ -28,14 +28,14 @@ export default function Tags({ tags, tag }) {
     <div className="flex items-center justify-center gap-1.5 flex-wrap max-w-lg mx-auto">
       {tags.map((tag) => (
         <Button
-          key={tag}
-          onClick={() => handleSubmit(tag)}
+          key={tag._id}
+          onClick={() => handleSubmit(tag._id)}
           className="flex items-center gap-0.5 bg-zinc-300 dark:bg-zinc-700 px-1.5 py-0.5 rounded text-xs text-zinc-900 dark:text-zinc-100"
         >
-          {filter === tag && (
+          {filter === tag._id && (
             <XMarkIcon className="size-3 text-zinc-900 dark:text-zinc-100" />
           )}
-          {tag}
+          {tag._id}
         </Button>
       ))}
     </div>
