@@ -114,7 +114,7 @@ const SearchBar = () => {
             )}
           </div>
 
-          <ComboboxOptions className="group absolute left-0 w-full z-10 space-y-2 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 mt-1 shadow">
+          <ComboboxOptions transition className="group absolute left-0 w-full z-10 space-y-2 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 mt-1 shadow transition duration-75 ease-out empty:invisible data-[closed]:scale-95 data-[closed]:opacity-0">
             {data.length === 0 &&
             query.length === 0 &&
             recentSearches.length > 0 ? (
