@@ -19,7 +19,11 @@ export default function RootLayout({ children }) {
       <body
         className={`${GeistMono.className} bg-zinc-100 dark:bg-zinc-900 selection:bg-zinc-400/25 dark:selection:bg-zinc-600/25`}
       >
-        <ThemeProvider attribute="class" enableSystem={false}>
+        <ThemeProvider
+          attribute="class"
+          enableSystem={false}
+          defaultTheme="dark"
+        >
           <main
             className="max-w-3xl py-16 px-6 mx-auto"
             style={{ minHeight: "calc(100vh - 45px)" }}
