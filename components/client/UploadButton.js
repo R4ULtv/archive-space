@@ -149,6 +149,11 @@ export default function UploadButton({ fetchURL }) {
 
   const onFileChange = async (e) => {
     const files = Array.from(e.target.files);
+    const maxFiles = 5;
+    if (files.length > maxFiles) {
+      toast.warning(`You can only upload up to ${maxFiles} files at a time.`);
+      return;
+    }
     if (files.length === 0) return;
 
     setLoading(true);
@@ -264,7 +269,7 @@ export default function UploadButton({ fetchURL }) {
             Drag and drop files here or click to select.
           </p>
           <p className="text-center text-sm text-zinc-500">
-            Max file size: 300 MB.
+            Max (5) files per upload.
           </p>
         </>
       )}
