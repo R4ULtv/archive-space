@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { Button } from "@headlessui/react";
 import { ArrowUpTrayIcon } from "@heroicons/react/20/solid";
+import { ArrowUpIcon } from "@heroicons/react/16/solid";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -231,32 +232,39 @@ export default function UploadButton({ fetchURL }) {
             {Object.entries(fileProgress).map(([fileName, progress]) => (
               <div key={fileName} className="flex flex-row items-center">
                 <span className="text-sm">{fileName}</span>
-                <div className="relative size-5 ml-auto">
-                  <svg
-                    className="size-full -rotate-90"
-                    viewBox="0 0 36 36"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="18"
-                      cy="18"
-                      r="16"
+                <div className="relative ml-auto bg-transparent">
+                  {progress === 100 ? (
+                    <div className="rounded-full flex items-center justify-center p-[3px] bg-zinc-700 dark:bg-zinc-300 size-4">
+                      <ArrowUpIcon className="size-full text-zinc-100 dark:text-zinc-900" />
+                    </div>
+                  ) : (
+                    <svg
+                      className="size-4 -rotate-90 text-zinc-700 dark:text-zinc-300"
+                      viewBox="0 0 24 24"
                       fill="none"
-                      className="stroke-current text-zinc-200 dark:text-zinc-800"
-                      strokeWidth="4"
-                    ></circle>
-                    <circle
-                      cx="18"
-                      cy="18"
-                      r="16"
-                      fill="none"
-                      className="stroke-current text-zinc-900 dark:text-zinc-100"
-                      strokeWidth="4"
-                      strokeDasharray="100"
-                      strokeDashoffset={100 - progress}
-                      strokeLinecap="round"
-                    ></circle>
-                  </svg>
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                      ></circle>
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeDasharray="100"
+                        strokeDashoffset={100 - progress}
+                        strokeLinecap="round"
+                        className="transition-all duration-300 ease-in"
+                      ></circle>
+                    </svg>
+                  )}
                 </div>
               </div>
             ))}
