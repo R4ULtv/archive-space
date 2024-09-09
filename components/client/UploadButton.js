@@ -30,17 +30,17 @@ export default function UploadButton({ fetchURL }) {
     let chunkSize = minChunkSize;
 
     if (fileSizeMB <= 50) {
-      chunkSize = minChunkSize; // Small Files: fixed to 5 MB
+      chunkSize = minChunkSize; // Small Files: chunk fixed to 5 MB
     } else if (fileSizeMB <= 300) {
       chunkSize =
         minChunkSize +
-        Math.floor(((fileSizeMB - 50) / (300 - 50)) * (30 - minChunkSize)); // Medium Files: from 5 MB up to 35 MB
+        Math.floor(((fileSizeMB - 50) / (300 - 50)) * (30 - minChunkSize)); // Medium Files: chunk from 5 MB up to 35 MB
     } else if (fileSizeMB <= 1500) {
       chunkSize =
         35 +
-        Math.floor(((fileSizeMB - 300) / (1500 - 300)) * (maxChunkSize - 35)); // Big Files: from 35 MB up to 95 MB
+        Math.floor(((fileSizeMB - 300) / (1500 - 300)) * (maxChunkSize - 35)); // Big Files: chunk from 35 MB up to 95 MB
     } else {
-      chunkSize = maxChunkSize; // Very Big Files: fixed to 95 MB
+      chunkSize = maxChunkSize; // Very Big Files: chunk fixed to 95 MB
     }
 
     return chunkSize * 1024 * 1024;
