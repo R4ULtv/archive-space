@@ -164,7 +164,7 @@ export default function EditButton({
                       />
                     </ComboboxButton>
                   </div>
-                  <ComboboxOptions className="group absolute mt-1 z-10 max-h-60 w-full overflow-auto rounded-md bg-zinc-200 dark:bg-zinc-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  <ComboboxOptions className="absolute mt-1 z-10 max-h-60 w-full overflow-auto rounded-md bg-zinc-200 dark:bg-zinc-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                     {filteredCategories.length === 0 && query !== "" ? (
                       <ComboboxOption
                         value={query}
@@ -177,16 +177,16 @@ export default function EditButton({
                         <ComboboxOption
                           key={category}
                           value={category}
-                          className="relative cursor-default select-none py-2 pl-10 pr-4 text-zinc-900 dark:text-zinc-100 data-[focus]:bg-zinc-300 data-[focus]:dark:bg-zinc-700 data-[focus]:text-zinc-900 group-data-[selected]:dark:text-zinc-100"
+                          className="relative group flex items-center gap-2 cursor-default select-none py-2 px-4 text-zinc-900 dark:text-zinc-100 data-[focus]:bg-zinc-300 data-[focus]:dark:bg-zinc-700 data-[focus]:text-zinc-900 group-data-[selected]:dark:text-zinc-100"
                         >
                           <>
-                            <span className="block truncate">{category}</span>
-                            <span className="invisible absolute inset-y-0 left-0 flex items-center pl-2 group-data-[selected]:visible">
+                            <span className="invisible group-data-[selected]:visible">
                               <CheckIcon
                                 className="size-4"
                                 aria-hidden="true"
                               />
                             </span>
+                            <span className="block truncate">{category}</span>
                           </>
                         </ComboboxOption>
                       ))
