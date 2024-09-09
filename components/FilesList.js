@@ -55,7 +55,11 @@ export async function FilesList({ tag, category }) {
                 file.tags.map((tag) => (
                   <Link
                     key={tag}
-                    href={`?tag=${tag}`}
+                    href={
+                      file.category !== "uncategorized"
+                        ? `/${file.category}?tag=${tag}`
+                        : `?tag=${tag}`
+                    }
                     className="bg-zinc-300 dark:bg-zinc-700 px-1.5 py-0.5 rounded text-xs text-zinc-900 dark:text-zinc-100"
                   >
                     {tag}
