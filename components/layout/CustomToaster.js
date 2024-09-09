@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { Toaster } from "sonner";
 
+// Create a custom toaster for handling the theme from next-themes
 export default function CustomToaster() {
   const { theme } = useTheme();
 

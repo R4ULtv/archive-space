@@ -7,6 +7,7 @@ import { useEffect } from "react";
 export default function ThemeChanger() {
   const { theme, setTheme } = useTheme();
 
+  // Change theme pressing ctrl + shift + L
   useEffect(() => {
     const down = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === "L") {

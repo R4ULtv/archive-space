@@ -1,5 +1,7 @@
 "use client";
 
+// Code from https://ui.aceternity.com/components/shooting-stars-and-stars-background
+
 import React, { useEffect, useState, useRef } from "react";
 
 const getRandomStartPoint = () => {
