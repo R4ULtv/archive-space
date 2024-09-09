@@ -24,7 +24,7 @@ export default function DeleteButton({ fileName }) {
     setIsOpen(false);
     setLoading(true);
 
-    const res = await DeleteFile(encodeURIComponent(fileName));
+    const res = await DeleteFile(fileName);
     if (res) {
       if (res.error) {
         toast.error("Something went wrong.", {
