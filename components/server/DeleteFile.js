@@ -14,7 +14,7 @@ export async function DeleteFile(fileName) {
 
   const command = new DeleteObjectCommand({
     Bucket: process.env.R2_BUCKET_NAME,
-    Key: fileName,
+    Key: encodeURIComponent(fileName),
   });
 
   try {
