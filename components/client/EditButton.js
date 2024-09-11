@@ -229,7 +229,7 @@ export default function EditButton({
                     maxLength={16}
                     inputMode="text"
                     aria-label="Add tags"
-                    className="min-w-24 w-min flex-1 bg-transparent outline-none text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-400"
+                    className="min-w-24 p-1 w-min flex-1 bg-transparent outline-none text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-400"
                   />
                 </div>
               </div>
