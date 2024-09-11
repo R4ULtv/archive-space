@@ -14,16 +14,10 @@ export default async function TokenGenerator({ fileName, type }) {
   const client = await clientPromise;
   const db = client.db("production");
 
-  // check if the file already exists
-  const file = await db.collection("files").findOne({ name: fileName });
-  if (file) {
-    return { error: "This file already exists in the cloud." };
-  }
-
   // insert the token into the database
   await db.collection("tokens").insertOne({
     token: token,
-    file: encodeURIComponent(fileName),
+    file: fileName,
     type: type,
     used: false,
     createdAt: new Date(),

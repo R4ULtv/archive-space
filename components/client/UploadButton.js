@@ -173,7 +173,7 @@ export default function UploadButton({ fetchURL }) {
       for (const file of files) {
         // Generate token for the file upload
         const token = await TokenGenerator({
-          fileName: file.name,
+          fileName: encodeURIComponent(file.name),
           type: "upload",
         });
         if (token.error) {
