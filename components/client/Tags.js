@@ -25,7 +25,7 @@ export default function Tags({ tags, tag }) {
   }, [tag]);
 
   return (
-    <div className="flex items-center justify-center gap-1.5 flex-wrap max-w-lg mx-auto">
+    <div className="flex items-center sm:justify-center gap-1.5 flex-wrap sm:max-w-lg mx-auto">
       {tags.map((tag) => (
         <Button
           key={tag._id}
