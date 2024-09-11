@@ -50,7 +50,7 @@ export async function FilesList({ tag, category }) {
                 : file.type}{" "}
               · {numeral(file.size).format("0.0 b")}
             </p>
-            <div className="flex gap-1 mt-2">
+            <div className="gap-1 mt-2 hidden sm:flex">
               {file.tags &&
                 file.tags.map((tag) => (
                   <Link
