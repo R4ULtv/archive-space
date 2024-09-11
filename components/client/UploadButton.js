@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { Button } from "@headlessui/react";
 import { ArrowUpTrayIcon } from "@heroicons/react/20/solid";
-import { ArrowUpIcon } from "@heroicons/react/16/solid";
+import { ArrowUpIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -98,7 +98,10 @@ export default function UploadButton({ fetchURL }) {
 
       setFileProgress((prev) => ({
         ...prev,
-        [file.name]: (i / totalChunks) * 80 + 10, // from 10 to 90
+        [file.name]: {
+          status: "uploading",
+          progress: (i / totalChunks) * 80 + 10,
+        }, // from 10 to 90
       }));
     }
 
@@ -161,35 +164,54 @@ export default function UploadButton({ fetchURL }) {
     // Initialize progress for each selected file
     setFileProgress((prev) => ({
       ...prev,
-      ...Object.fromEntries(files.map((file) => [file.name, 0])),
+      ...Object.fromEntries(
+        files.map((file) => [file.name, { status: "idle", progress: 0 }])
+      ),
     }));
 
     try {
       for (const file of files) {
         // Generate token for the file upload
         const token = await TokenGenerator({
-          fileName: encodeURIComponent(file.name),
+          fileName: file.name,
           type: "upload",
         });
-        if (token) {
-          setFileProgress((prev) => ({ ...prev, [file.name]: 10 }));
-        }
+        if (token.error) {
+          toast.error("Something went wrong.", {
+            description: token.error,
+          });
+          setFileProgress((prev) => ({
+            ...prev,
+            [file.name]: { status: "error", progress: 100 },
+          }));
+        } else {
+          setFileProgress((prev) => ({
+            ...prev,
+            [file.name]: { status: "uploading", progress: 10 },
+          }));
 
-        const result = await uploadFile(file, token);
-        if (result) {
-          setFileProgress((prev) => ({ ...prev, [file.name]: 90 }));
-        }
+          const result = await uploadFile(file, token);
+          if (result) {
+            setFileProgress((prev) => ({
+              ...prev,
+              [file.name]: { status: "finishing", progress: 90 },
+            }));
+          }
 
-        // Save file metadata after upload
-        const save = await saveFile({
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          lastModified: file.lastModified,
-        });
+          // Save file metadata after upload
+          const save = await saveFile({
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            lastModified: file.lastModified,
+          });
 
-        if (save) {
-          setFileProgress((prev) => ({ ...prev, [file.name]: 100 }));
+          if (save) {
+            setFileProgress((prev) => ({
+              ...prev,
+              [file.name]: { status: "done", progress: 100 },
+            }));
+          }
         }
       }
     } catch (error) {
@@ -229,13 +251,17 @@ export default function UploadButton({ fetchURL }) {
       {loading ? (
         Object.entries(fileProgress).length > 0 && (
           <div className="w-full space-y-2">
-            {Object.entries(fileProgress).map(([fileName, progress]) => (
+            {Object.entries(fileProgress).map(([fileName, fileInfo]) => (
               <div key={fileName} className="flex flex-row items-center">
                 <span className="text-sm">{fileName}</span>
                 <div className="relative ml-auto bg-transparent">
-                  {progress === 100 ? (
+                  {fileInfo.status === "done" ? (
                     <div className="rounded-full flex items-center justify-center p-[3px] bg-zinc-700 dark:bg-zinc-300 size-4">
                       <ArrowUpIcon className="size-full text-zinc-100 dark:text-zinc-900" />
+                    </div>
+                  ) : fileInfo.status === "error" ? (
+                    <div className="rounded-full flex items-center justify-center p-[3px] bg-zinc-700 dark:bg-zinc-300 size-4">
+                      <XMarkIcon className="size-full text-zinc-100 dark:text-zinc-900" />
                     </div>
                   ) : (
                     <svg
@@ -259,7 +285,7 @@ export default function UploadButton({ fetchURL }) {
                         stroke="currentColor"
                         strokeWidth="3"
                         strokeDasharray="100"
-                        strokeDashoffset={100 - progress}
+                        strokeDashoffset={100 - fileInfo.progress}
                         strokeLinecap="round"
                         className="transition-all duration-300 ease-in"
                       ></circle>
