@@ -7,7 +7,7 @@ export default function CategoryGrid({ categories }) {
   const currentPath = usePathname();
 
   return (
-    <div className="flex items-center gap-1.5 mt-1">
+    <div className="flex items-center flex-wrap gap-1.5 mt-1">
       <Link
         href={`/`}
         className={
