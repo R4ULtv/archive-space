@@ -85,7 +85,7 @@ export async function FilesList({ tag, category }) {
         </div>
       ))}
       {!category && (
-        <div className="text-sm text-center text-zinc-600 dark:text-zinc-400 tracking-wide">
+        <div className="text-sm text-center text-zinc-600 dark:text-zinc-400 tracking-wide select-none">
           ·····
         </div>
       )}
