@@ -17,7 +17,7 @@ export default function AppLayout({ children }) {
             <Categories />
           </Suspense>
         </div>
-        <div>
+        <div className="shrink-0">
           <ThemeChanger />
           <SignOutButton />
         </div>
