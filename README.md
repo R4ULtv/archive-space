@@ -16,12 +16,16 @@ This repository provides a simple website for managing your personal archive usi
 - Give your bucket a name and select the region where you want to create it.
 - Create an API key for the r2 bucket. Check on your [profile page](https://dash.cloudflare.com/profile/api-tokens).
 
-### 2. Set up your environment variables:
+### 2. Create your Cloudflare worker:
+You need to create a cloudflare worker that manage the download and upload of files. 
+You can create one using the following instructions and examples from my [multi-region-r2-bucket-system](https://github.com/R4ULtv/multi-region-r2-bucket-system).
+
+### 3. Set up your environment variables:
 
 - Create a `.env.local` file in the root directory of the project.
 - You need to follow the example on `.env.example` and fill in all the steps.
 
-### 3. Install the repository locally:
+### 4. Install the repository locally:
 
 - Open a terminal and navigate to the directory where you want to install the repository.
 - Run the following command to clone the repository:
@@ -35,7 +39,7 @@ cd archive-space
 npm install
 ```
 
-### 4. Run the development server:
+### 5. Run the development server:
 
 In the repository directory, run the following command to start the development server:
 
@@ -44,6 +48,6 @@ In the repository directory, run the following command to start the development 
 npm run dev
 ```
 
-### 5. Open your browser:
+### 6. Open your browser:
 
 Navigate to `http://localhost:3000` to view the application.
