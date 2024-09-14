@@ -5,6 +5,7 @@ import SearchBar from "@/components/client/SearchBar";
 import { FilesList, FilesListLoading } from "@/components/FilesList";
 import { TagsGrid, TagsGridLoading } from "@/components/server/TagsGrid";
 import getCategories from "@/utils/getCategories";
+import { Pagination } from "@/components/pagination";
 
 export default async function Blog({ params, searchParams }) {
   const category = await getCategories(false);
@@ -19,7 +20,11 @@ export default async function Blog({ params, searchParams }) {
         <TagsGrid tag={searchParams.tag} category={params.slug} />
       </Suspense>
       <Suspense fallback={<FilesListLoading />}>
-        <FilesList tag={searchParams.tag} category={params.slug} />
+        <FilesList tag={searchParams.tag} category={params.slug} page={searchParams.page} />
+      </Suspense>
+
+      <Suspense>
+        <Pagination category={params.slug} searchParams={searchParams}/>
       </Suspense>
     </div>
   );

@@ -11,7 +11,7 @@ import numeral from "numeral";
 import EditButton from "@/components/client/EditButton";
 import getCategories from "@/utils/getCategories";
 
-export async function FilesList({ tag, category }) {
+export async function FilesList({ tag, category, page }) {
   const client = await clientPromise;
   const db = client.db("production");
 
@@ -22,7 +22,8 @@ export async function FilesList({ tag, category }) {
     .collection("files")
     .find(query)
     .sort({ uploadedAt: -1 })
-    .limit(category ? 100 : 5)
+    .skip(20 * (parseInt(page) - 1) || 0)
+    .limit(category ? 20 : 8)
     .toArray();
 
   const categories = await getCategories();
