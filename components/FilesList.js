@@ -5,11 +5,10 @@ import {
   TrashIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
-import DownloadButton from "@/components/client/DownloadButton";
-import DeleteButton from "@/components/client/DeleteButton";
 import numeral from "numeral";
-import EditButton from "@/components/client/EditButton";
 import getCategories from "@/utils/getCategories";
+import DropdownMenu from "@/components/client/DropdownMenu";
+import { StarIcon } from "@heroicons/react/16/solid";
 
 export async function FilesList({ tag, category, page }) {
   const client = await clientPromise;
@@ -24,6 +23,9 @@ export async function FilesList({ tag, category, page }) {
     .sort({ uploadedAt: -1 })
     .skip(20 * (parseInt(page) - 1) || 0)
     .limit(category ? 20 : 8)
+    .project({
+      _id: 0,
+    })
     .toArray();
 
   const categories = await getCategories();
@@ -32,12 +34,12 @@ export async function FilesList({ tag, category, page }) {
     <div>
       {files.map((file) => (
         <div
-          key={file._id}
+          key={file.name}
           className="flex justify-between gap-4 py-1 sm:py-3 px-3 -mx-3 group rounded-md hover:bg-zinc-200 dark:hover:bg-zinc-800 duration-150"
         >
           <div className="flex-1">
-            <p className="font-medium text-zinc-800 dark:text-zinc-200">
-              {file.name}
+            <p className="font-medium text-zinc-800 dark:text-zinc-200 flex items-center gap-1">
+              {file.favorite && <StarIcon className="size-3.5" />} {file.name}
             </p>
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
               {file.lastModified.toLocaleDateString("en-US", {
@@ -69,17 +71,9 @@ export async function FilesList({ tag, category, page }) {
             </div>
           </div>
           <div className="flex items-center justify-center gap-1">
-            <EditButton
-              fileName={file.name}
-              category={
-                file.category.charAt(0).toUpperCase() + file.category.slice(1)
-              }
+            <DropdownMenu
+              file={file}
               categories={categories}
-              oldTags={file.tags}
-            />
-            <DeleteButton fileName={file.name} />
-            <DownloadButton
-              fileName={file.name}
               fetchURL={process.env.WORKER_URL}
             />
           </div>
