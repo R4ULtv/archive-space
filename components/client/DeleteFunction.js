@@ -28,7 +28,6 @@ export function DeleteDialog({ fileName, isOpen, setIsOpen }) {
         router.refresh(); // Refresh the router if deletion was successful
       }
     }
-    setLoading(false);
   };
 
   return (
