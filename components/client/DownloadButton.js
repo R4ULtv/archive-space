@@ -15,7 +15,7 @@ export default function DownloadButton({ fileName, fetchURL }) {
     setLoading(true);
     try {
       const token = await TokenGenerator({
-        fileName: encodeURIComponent(fileName),
+        fileName: fileName,
         type: "download",
       });
 
@@ -34,6 +34,8 @@ export default function DownloadButton({ fileName, fetchURL }) {
         toast.error("Something went wrong.", {
           description: "Failed to download file.",
         });
+        setLoading(false);
+        return;
       }
 
       const blob = await response.blob();
