@@ -1,59 +1,69 @@
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { Credentials, App } from 'realm-web';
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { Credentials, App } from "realm-web";
 
 const app = new Hono();
 
 app.use(
-  '/*',
+  "/*",
   cors({
-    origin: 'https://archive.raulcarini.dev',
-    allowMethods: ['GET', 'POST', 'PUT', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization'],
+    origin: "https://archive.raulcarini.dev",
+    allowMethods: ["GET", "POST", "PUT", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
   })
 );
 
 app.onError((err, c) => {
   console.error(`${err}`);
-  return c.text('There was an error processing the request', 500);
+  return c.text("There was an error processing the request", 500);
 });
 
 const handleGet = async (c, env, objectName, publicHost) => {
   const app = new App({ id: env.MONGODB_APP_ID });
   await app.logIn(Credentials.apiKey(env.MONGODB_API_KEY));
 
-  const mongodb = app.currentUser.mongoClient('mongodb-atlas');
-  const database = mongodb.db('production');
+  const mongodb = app.currentUser.mongoClient("mongodb-atlas");
+  const database = mongodb.db("production");
 
   if (publicHost) {
-    const searchFile = await database.collection('files').findOne({
+    const searchFile = await database.collection("files").findOne({
       name: objectName,
       public: true,
     });
 
     if (!searchFile) {
-      return c.text("Invalid Request: the file doesn't exist or isn't public", 400);
+      return c.text(
+        "Invalid Request: the file doesn't exist or isn't public",
+        400
+      );
     }
   } else {
-    const token = c.req.header('Authorization')?.split(' ')[1];
-    if (!token) return c.text('Missing or invalid Authorization header', 401);
+    const token = c.req.header("Authorization")?.split(" ")[1];
+    if (!token) return c.text("Missing or invalid Authorization header", 401);
 
-    const searchToken = await database.collection('tokens').findOne({
+    const searchToken = await database.collection("tokens").findOne({
       token: token,
       file: encodeURIComponent(objectName),
-      type: 'download',
+      type: "download",
       used: false,
     });
 
     if (!searchToken) {
-      return c.text('Invalid Request: the token is invalid or expired', 400);
+      return c.text("Invalid Request: the token is invalid or expired", 400);
     }
 
     await database
-      .collection('tokens')
+      .collection("tokens")
       .updateOne(
         { _id: searchToken._id },
-        { $set: { used: true, downloadDate: new Date(), country: c.req.raw.cf.country, city: c.req.raw.cf.city } }
+        {
+          $set: {
+            used: true,
+            downloadDate: new Date(),
+            country: c.req.raw.cf.country,
+            city: c.req.raw.cf.city,
+          },
+        }
       );
   }
 
@@ -70,42 +80,53 @@ const handleGet = async (c, env, objectName, publicHost) => {
 
   const headers = new Headers();
   object.writeHttpMetadata(headers);
-  headers.set('etag', object.httpEtag);
+  headers.set("etag", object.httpEtag);
 
   if (object.range) {
-    headers.set('content-range', `bytes ${object.range.offset}-${object.range.end ?? object.size - 1}/${object.size}`);
+    headers.set(
+      "content-range",
+      `bytes ${object.range.offset}-${object.range.end ?? object.size - 1}/${
+        object.size
+      }`
+    );
   }
 
-  const status = object.body ? (c.req.header('range') !== null ? 206 : 200) : 304;
+  const status = object.body
+    ? c.req.header("range") !== null
+      ? 206
+      : 200
+    : 304;
 
   return new Response(object.body, { headers, status });
 };
 
 const handlePost = async (c, env, objectName) => {
-  const action = c.req.query('action');
-  const token = c.req.header('Authorization')?.split(' ')[1];
-  if (!token) return c.text('Missing or invalid Authorization header', 401);
+  const action = c.req.query("action");
+  const token = c.req.header("Authorization")?.split(" ")[1];
+  if (!token) return c.text("Missing or invalid Authorization header", 401);
 
   const app = new App({ id: env.MONGODB_APP_ID });
   await app.logIn(Credentials.apiKey(env.MONGODB_API_KEY));
 
-  const mongodb = app.currentUser.mongoClient('mongodb-atlas');
-  const database = mongodb.db('production');
-  const searchToken = await database.collection('tokens').findOne({
+  const mongodb = app.currentUser.mongoClient("mongodb-atlas");
+  const database = mongodb.db("production");
+  const searchToken = await database.collection("tokens").findOne({
     token: token,
     file: objectName,
-    type: 'upload',
+    type: "upload",
     used: false,
   });
 
   if (!searchToken) {
-    return c.text('Invalid Request: the token is invalid or expired', 400);
+    return c.text("Invalid Request: the token is invalid or expired", 400);
   }
 
   switch (action) {
-    case 'mpu-create': {
+    case "mpu-create": {
       await app.currentUser.logOut();
-      const multipartUpload = await env.ARCHIVE.createMultipartUpload(objectName);
+      const multipartUpload = await env.ARCHIVE.createMultipartUpload(
+        objectName
+      );
       return c.json(
         {
           key: multipartUpload.objectName,
@@ -114,22 +135,32 @@ const handlePost = async (c, env, objectName) => {
         201
       );
     }
-    case 'mpu-complete': {
-      const uploadId = c.req.query('uploadId');
-      if (!uploadId) return c.text('Missing uploadId', 400);
+    case "mpu-complete": {
+      const uploadId = c.req.query("uploadId");
+      if (!uploadId) return c.text("Missing uploadId", 400);
 
-      const multipartUpload = env.ARCHIVE.resumeMultipartUpload(objectName, uploadId);
+      const multipartUpload = env.ARCHIVE.resumeMultipartUpload(
+        objectName,
+        uploadId
+      );
 
       const completeBody = await c.req.json();
-      if (!completeBody) return c.text('Missing or incomplete body', 400);
+      if (!completeBody) return c.text("Missing or incomplete body", 400);
 
       try {
         await multipartUpload.complete(completeBody.parts);
         await database
-          .collection('tokens')
+          .collection("tokens")
           .updateOne(
             { _id: searchToken._id },
-            { $set: { used: true, uploadDate: new Date(), country: c.req.raw.cf.country, city: c.req.raw.cf.city } }
+            {
+              $set: {
+                used: true,
+                uploadDate: new Date(),
+                country: c.req.raw.cf.country,
+                city: c.req.raw.cf.city,
+              },
+            }
           );
         await app.currentUser.logOut();
         return c.text(null, 201);
@@ -143,46 +174,49 @@ const handlePost = async (c, env, objectName) => {
 };
 
 const handlePut = async (c, env, objectName) => {
-  const action = c.req.query('action');
-  const token = c.req.header('Authorization')?.split(' ')[1];
-  if (!token) return c.text('Missing or invalid Authorization header', 401);
+  const action = c.req.query("action");
+  const token = c.req.header("Authorization")?.split(" ")[1];
+  if (!token) return c.text("Missing or invalid Authorization header", 401);
 
   const app = new App({ id: env.MONGODB_APP_ID });
   await app.logIn(Credentials.apiKey(env.MONGODB_API_KEY));
 
-  const mongodb = app.currentUser.mongoClient('mongodb-atlas');
-  const database = mongodb.db('production');
-  const searchToken = await database.collection('tokens').findOne({
+  const mongodb = app.currentUser.mongoClient("mongodb-atlas");
+  const database = mongodb.db("production");
+  const searchToken = await database.collection("tokens").findOne({
     token: token,
     file: objectName,
-    type: 'upload',
+    type: "upload",
     used: false,
   });
 
   if (!searchToken) {
-    return c.text('Invalid Request: the token is invalid or expired', 400);
+    return c.text("Invalid Request: the token is invalid or expired", 400);
   }
 
   await app.currentUser.logOut();
 
-  if (action === 'mpu-uploadpart') {
-    const uploadId = c.req.query('uploadId');
-    const partNumberString = c.req.query('partNumber');
+  if (action === "mpu-uploadpart") {
+    const uploadId = c.req.query("uploadId");
+    const partNumberString = c.req.query("partNumber");
 
     if (!partNumberString || !uploadId) {
-      return c.text('Missing partNumber or uploadId', 400);
+      return c.text("Missing partNumber or uploadId", 400);
     }
 
     const body = await c.req.parseBody();
     const file = body.file;
 
     if (!file) {
-      return c.text('Missing file in request body', 400);
+      return c.text("Missing file in request body", 400);
     }
 
     try {
       const partNumber = parseInt(partNumberString);
-      const multipartUpload = env.ARCHIVE.resumeMultipartUpload(objectName, uploadId);
+      const multipartUpload = env.ARCHIVE.resumeMultipartUpload(
+        objectName,
+        uploadId
+      );
       const uploadedPart = await multipartUpload.uploadPart(partNumber, file);
       return c.json(uploadedPart, 201);
     } catch (error) {
@@ -193,18 +227,18 @@ const handlePut = async (c, env, objectName) => {
   return c.text(`Unknown action ${action} for PUT`, 400);
 };
 
-app.get('/:objectName', async (c) => {
+app.get("/:objectName", async (c) => {
   const { objectName } = c.req.param();
-  const publicHost = c.req.header('host')?.startsWith('public');
+  const publicHost = c.req.header("host")?.startsWith("public");
   return handleGet(c, c.env, objectName, publicHost);
 });
 
-app.post('/:objectName', async (c) => {
+app.post("/:objectName", async (c) => {
   const { objectName } = c.req.param();
   return handlePost(c, c.env, encodeURIComponent(objectName));
 });
 
-app.put('/:objectName', async (c) => {
+app.put("/:objectName", async (c) => {
   const { objectName } = c.req.param();
   return handlePut(c, c.env, encodeURIComponent(objectName));
 });
