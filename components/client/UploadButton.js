@@ -74,6 +74,9 @@ export default function UploadButton({ fetchURL }) {
       const end = Math.min(start + chunkSize, file.size);
       const chunk = file.slice(start, end);
 
+      const formData = new FormData();
+      formData.append("file", chunk);
+
       // Step 2: Upload each part
       const uploadPartResponse = await fetch(
         `${fetchURL}/${encodeURIComponent(
@@ -82,7 +85,7 @@ export default function UploadButton({ fetchURL }) {
         {
           method: "PUT",
           mode: "cors",
-          body: chunk,
+          body: formData,
           headers: {
             Authorization: `Bearer ${token}`,
           },
