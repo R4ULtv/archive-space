@@ -1,0 +1,17 @@
+{
+  "name": "archive-space-worker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev"
+  },
+  "dependencies": {
+    "hono": "^4.6.2",
+    "realm-web": "^2.0.1"
+  },
+  "devDependencies": {
+    "wrangler": "^3.60.3"
+  }
+}

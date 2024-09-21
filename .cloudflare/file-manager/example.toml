@@ -1,0 +1,14 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "archive-space-worker"
+main = "src/hono.js"
+compatibility_date = "2024-08-21"
+
+account_id = "<YOUR_ACCOUNT_ID>"
+
+[vars]
+MONGODB_APP_ID="<YOUR_APP_ID>"
+MONGODB_API_KEY = "<YOUR_API_KEY>"
+
+[[r2_buckets]]
+binding = "<YOUR_ENV_NAME>"
+bucket_name = "<YOUR_BUCKET_NAME>"
