@@ -178,7 +178,6 @@ export default {
               }
             );
           await app.currentUser.logOut();
-
           return new Response(object.body, {
             headers,
             status,
@@ -267,7 +266,6 @@ export default {
                     }
                   );
                 await app.currentUser.logOut();
-
                 return new Response(null, {
                   headers,
                   status: 201,
@@ -322,7 +320,10 @@ export default {
                 status: 400,
               });
             }
-            if (request.body === null) {
+            const formData = await request.formData();
+            const file = formData.get("file");
+            
+            if (file === null) {
               return new Response("Missing request body", {
                 headers,
                 status: 400,
@@ -337,9 +338,8 @@ export default {
               );
               const uploadedPart = await multipartUpload.uploadPart(
                 partNumber,
-                request.body
+                file
               );
-
               return new Response(JSON.stringify(uploadedPart), {
                 headers,
                 status: 201,
