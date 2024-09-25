@@ -96,7 +96,6 @@ const handleGet = async (c, env, objectName, publicHost) => {
       ? 206
       : 200
     : 304;
-
   return new Response(object.body, { headers, status });
 };
 
