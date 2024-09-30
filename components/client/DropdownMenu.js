@@ -10,24 +10,28 @@ import {
 import {
   ArrowDownTrayIcon,
   EllipsisVerticalIcon,
-  GlobeAltIcon,
   PencilIcon,
+  ShareIcon,
   StarIcon,
   TrashIcon,
 } from "@heroicons/react/16/solid";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { EditDialog } from "@/components/client/EditFunction";
 import { DeleteDialog } from "@/components/client/DeleteFunction";
 import { onSubmitDownload } from "@/components/client/DownloadFunction";
-import FavoriteFile from "@/components/server/FavoriteFile";
-import { useRouter } from "next/navigation";
+import { ShareDialog } from "@/components/client/ShareDialog";
 
-export default function DropdownMenu({ file, categories, fetchURL }) {
+import FavoriteFile from "@/components/server/FavoriteFile";
+
+export default function DropdownMenu({ file, categories, fetchURL, publicURL }) {
   const router = useRouter();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   return (
     <Menu>
@@ -80,13 +84,13 @@ export default function DropdownMenu({ file, categories, fetchURL }) {
             {file.favorite ? "Remove from Favorites" : "Add to Favorites"}
           </Button>
         </MenuItem>
-        <MenuItem disabled className="opacity-50">
-          <Button
-            disabled
-            className="group flex w-full items-center gap-2 rounded py-1.5 px-3 data-[focus]:bg-zinc-200 dark:data-[focus]:bg-zinc-800"
-          >
-            <GlobeAltIcon className="size-4 text-zinc-600 dark:text-zinc-400" />
-            Make it Public
+        <MenuItem>
+          <Button onClick={() => setIsShareOpen(true)} className="group flex w-full items-center gap-2 rounded py-1.5 px-3 data-[focus]:bg-zinc-200 dark:data-[focus]:bg-zinc-800">
+            <ShareIcon className="size-4 text-zinc-600 dark:text-zinc-400" />
+            Share
+            <kbd className="ml-auto hidden tracking-widest font-semibold text-xs text-zinc-500 group-data-[focus]:inline">
+              ⌘S
+            </kbd>
           </Button>
         </MenuItem>
 
@@ -105,7 +109,14 @@ export default function DropdownMenu({ file, categories, fetchURL }) {
           </Button>
         </MenuItem>
       </MenuItems>
-
+      
+      <ShareDialog
+        isOpen={isShareOpen}
+        setIsOpen={setIsShareOpen}
+        fileName={file.name}
+        publicFile={file.public}
+        publicURL={publicURL}
+      />
       <EditDialog
         isOpen={isEditOpen}
         setIsOpen={setIsEditOpen}
