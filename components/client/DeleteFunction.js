@@ -7,6 +7,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
+import { useCallback } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -15,20 +16,21 @@ import { DeleteFile } from "@/components/server/DeleteFile";
 export function DeleteDialog({ fileName, isOpen, setIsOpen }) {
   const router = useRouter();
 
-  const onSubmitDelete = async () => {
+  const handleDelete = useCallback(async () => {
     setIsOpen(false);
-
-    const res = await DeleteFile(fileName);
-    if (res) {
+    try {
+      const res = await DeleteFile(fileName);
       if (res.error) {
-        toast.error("Something went wrong.", {
-          description: res.error,
-        });
-      } else {
-        router.refresh(); // Refresh the router if deletion was successful
+        throw new Error(res.error);
       }
+      router.refresh();
+      toast.success("File deleted successfully");
+    } catch (error) {
+      toast.error("Something went wrong.", {
+        description: error.message,
+      });
     }
-  };
+  }, [fileName, router, setIsOpen]);
 
   return (
     <Dialog
@@ -65,7 +67,7 @@ export function DeleteDialog({ fileName, isOpen, setIsOpen }) {
               Cancel
             </Button>
             <Button
-              onClick={() => onSubmitDelete()}
+              onClick={handleDelete}
               className="bg-zinc-300 dark:bg-zinc-700 px-2 py-1 rounded hover:bg-zinc-300/50 hover:dark:bg-zinc-700/50"
             >
               Delete
