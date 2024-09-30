@@ -4,35 +4,36 @@ import { auth } from "@/lib/auth";
 import clientPromise from "@/lib/mongodb";
 
 export default async function ShareFile(fileName) {
-  const session = await auth();
+  try {
+    const session = await auth();
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
 
-  if (!session) {
-    return {
-      error: "Unauthorized",
-    };
+    const client = await clientPromise;
+    const db = client.db("production");
+    const filesCollection = db.collection("files");
+
+    const file = await filesCollection.findOne(
+      { name: fileName },
+      { projection: { public: 1 } }
+    );
+    if (!file) {
+      throw new Error("File not found");
+    }
+
+    const result = await filesCollection.updateOne(
+      { name: fileName },
+      { $set: { public: !file.public } }
+    );
+
+    if (result.modifiedCount !== 1) {
+      throw new Error("Failed to update file");
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("ShareFile error:", error);
+    return { error: error.message };
   }
-
-  const client = await clientPromise;
-  const db = client.db("production");
-  const file = await db.collection("files").findOne({ name: fileName });
-
-  if (!file) {
-    return {
-      error: "Cannot find file to edit.",
-    };
-  }
-
-  const edit = await db
-    .collection("files")
-    .updateOne({ name: fileName }, { $set: { public: !file.public } });
-
-  if (!edit) {
-    return {
-      error: "The file was not edited successfully.",
-    };
-  }
-
-  return {
-    success: true,
-  };
 }
