@@ -52,19 +52,17 @@ const handleGet = async (c, env, objectName, publicHost) => {
       return c.text("Invalid Request: the token is invalid or expired", 400);
     }
 
-    await database
-      .collection("tokens")
-      .updateOne(
-        { _id: searchToken._id },
-        {
-          $set: {
-            used: true,
-            downloadDate: new Date(),
-            country: c.req.raw.cf.country,
-            city: c.req.raw.cf.city,
-          },
-        }
-      );
+    await database.collection("tokens").updateOne(
+      { _id: searchToken._id },
+      {
+        $set: {
+          used: true,
+          downloadDate: new Date(),
+          country: c.req.raw.cf.country,
+          city: c.req.raw.cf.city,
+        },
+      }
+    );
   }
 
   await app.currentUser.logOut();
@@ -91,11 +89,7 @@ const handleGet = async (c, env, objectName, publicHost) => {
     );
   }
 
-  const status = object.body
-    ? c.req.header("range") !== null
-      ? 206
-      : 200
-    : 304;
+  const status = object.body ? 200 : 304;
   return new Response(object.body, { headers, status });
 };
 
@@ -148,19 +142,17 @@ const handlePost = async (c, env, objectName) => {
 
       try {
         await multipartUpload.complete(completeBody.parts);
-        await database
-          .collection("tokens")
-          .updateOne(
-            { _id: searchToken._id },
-            {
-              $set: {
-                used: true,
-                uploadDate: new Date(),
-                country: c.req.raw.cf.country,
-                city: c.req.raw.cf.city,
-              },
-            }
-          );
+        await database.collection("tokens").updateOne(
+          { _id: searchToken._id },
+          {
+            $set: {
+              used: true,
+              uploadDate: new Date(),
+              country: c.req.raw.cf.country,
+              city: c.req.raw.cf.city,
+            },
+          }
+        );
         await app.currentUser.logOut();
         return c.text(null, 201);
       } catch (error) {
