@@ -75,6 +75,7 @@ export async function FilesList({ tag, category, page }) {
               file={file}
               categories={categories}
               fetchURL={process.env.WORKER_URL}
+              publicURL={process.env.PUBLIC_URL}
             />
           </div>
         </div>
