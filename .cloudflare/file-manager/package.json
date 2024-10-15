@@ -7,7 +7,7 @@
     "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
-    "hono": "^4.6.2",
+    "hono": "^4.6.5",
     "realm-web": "^2.0.1"
   },
   "devDependencies": {
