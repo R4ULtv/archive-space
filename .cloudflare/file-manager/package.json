@@ -11,6 +11,6 @@
     "realm-web": "^2.0.1"
   },
   "devDependencies": {
-    "wrangler": "^3.60.3"
+    "wrangler": "^4.24.3"
   }
 }
