@@ -16,6 +16,7 @@ export default function SignIn() {
         await signIn.social(
           {
             provider: "github",
+            callbackURL: "https://archive.raulcarini.dev",
           },
           {
             onRequest: () => {
