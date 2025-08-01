@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -8,10 +7,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
 import { useCategoryFilter } from "@/hooks/use-category-filters";
 import { fileTypeCategoryList } from "@/lib/mime-type";
-import { cn } from "@/lib/utils";
 import { ListFilterIcon, XIcon } from "lucide-react";
+import * as React from "react";
 
 const categoryOptions = fileTypeCategoryList.map((category) => ({
   value: category,
@@ -19,13 +19,18 @@ const categoryOptions = fileTypeCategoryList.map((category) => ({
 }));
 
 export default function CategoryFilter() {
+  const [open, setOpen] = React.useState(false);
   const { categories, clearCategories, hasCategory, toggleCategory } =
     useCategoryFilter();
-
   const hasActiveFilters = categories && categories.length > 0;
 
+  const handleClearFilters = React.useCallback(() => {
+    clearCategories();
+    setOpen(false);
+  }, [clearCategories]);
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -41,22 +46,8 @@ export default function CategoryFilter() {
       </PopoverTrigger>
       <PopoverContent className="w-36 p-3" align="end" sideOffset={6}>
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground text-xs font-medium">
-              Filters
-            </span>
-            <Button
-              size="icon"
-              variant="ghost"
-              className={cn(
-                "text-muted-foreground/80 hover:text-foreground size-4 hover:bg-transparent dark:hover:bg-transparent opacity-0",
-                hasActiveFilters && "opacity-100",
-              )}
-              onClick={clearCategories}
-              aria-label="Clear filters"
-            >
-              <XIcon aria-hidden="true" />
-            </Button>
+          <div className="text-muted-foreground text-xs font-medium">
+            Filters
           </div>
           <div className="space-y-3">
             {categoryOptions.map(({ value, label }) => (
@@ -72,6 +63,19 @@ export default function CategoryFilter() {
               </div>
             ))}
           </div>
+          {hasActiveFilters && (
+            <>
+              <Separator />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleClearFilters}
+                className="w-full h-8"
+              >
+                <XIcon aria-hidden="true" /> Clear Filters
+              </Button>
+            </>
+          )}
         </div>
       </PopoverContent>
     </Popover>
