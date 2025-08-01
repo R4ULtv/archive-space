@@ -1,7 +1,6 @@
 "use client";
 
 import FileListSkeleton from "@/components/file-list-skeleton";
-import { MediaPreview } from "@/components/media-preview";
 import { Button } from "@/components/ui/button";
 import { getFileIcon } from "@/components/utils/file-icon";
 import { useCategoryFilter } from "@/hooks/use-category-filters";
@@ -13,9 +12,14 @@ import {
 } from "@/lib/mime-type";
 import { FILES_CACHE_KEY, StorageObject, useFiles } from "@/lib/use-files";
 import { DownloadIcon, TrashIcon } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useQueryState } from "nuqs";
 import { useCallback, useMemo } from "react";
 import { mutate } from "swr";
+
+const MediaPreview = dynamic(() =>
+  import("../components/media-preview").then((mod) => mod.MediaPreview),
+);
 
 // Date formatter - created once and reused
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
