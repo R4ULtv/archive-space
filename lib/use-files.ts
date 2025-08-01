@@ -1,7 +1,7 @@
+import { fetcher } from "@/lib/fetcher";
 import useSWR from "swr";
-import { fetcher } from "./fetcher";
 
-export const FILES_CACHE_KEY = "https://auth.raulcarini.dev/api/storage";
+export const FILES_CACHE_KEY = `${process.env.NEXT_PUBLIC_AUTH_API_URL}/api/storage`;
 
 export interface StorageObject {
   key: string;
