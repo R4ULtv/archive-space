@@ -174,3 +174,27 @@ export function getFileTypeCategory(filename: string): FileTypeCategory {
 
   return FileTypeCategory.Other;
 }
+
+export function isPreviewSupported(mimeType: string): boolean {
+  // Add your supported mime types here
+  const supportedTypes = [
+    // Images
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "image/svg+xml",
+    // Videos
+    "video/mp4",
+    "video/webm",
+    "video/ogg",
+    // Audio
+    "audio/mp3",
+    "audio/wav",
+    "audio/ogg",
+    "audio/mpeg",
+  ];
+
+  return supportedTypes.includes(mimeType.toLowerCase());
+}
