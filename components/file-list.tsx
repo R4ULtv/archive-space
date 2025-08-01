@@ -1,11 +1,16 @@
 "use client";
 
 import FileListSkeleton from "@/components/file-list-skeleton";
+import { MediaPreview } from "@/components/media-preview";
 import { Button } from "@/components/ui/button";
 import { getFileIcon } from "@/components/utils/file-icon";
 import { useCategoryFilter } from "@/hooks/use-category-filters";
 import { formatBytes } from "@/hooks/use-file-upload";
-import { getFileTypeCategory, getMimeTypeFromExtension } from "@/lib/mime-type";
+import {
+  getFileTypeCategory,
+  getMimeTypeFromExtension,
+  isPreviewSupported,
+} from "@/lib/mime-type";
 import { FILES_CACHE_KEY, StorageObject, useFiles } from "@/lib/use-files";
 import { DownloadIcon, TrashIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
@@ -36,7 +41,7 @@ const FileItem = ({
     () => dateFormatter.format(new Date(file.uploaded)),
     [file.uploaded],
   );
-  const downloadUrl = useMemo(
+  const mediaURL = useMemo(
     () => `${FILES_CACHE_KEY}/${encodeURIComponent(file.key)}`,
     [file.key],
   );
@@ -51,7 +56,7 @@ const FileItem = ({
         <div className="flex aspect-square size-10 shrink-0 items-center justify-center rounded border">
           {getFileIcon({
             file: {
-              name: file.key,
+              name: mediaURL,
               type: mimeType,
             },
           })}
@@ -64,13 +69,19 @@ const FileItem = ({
         </div>
       </div>
       <div className="flex items-center">
+        {isPreviewSupported(getMimeTypeFromExtension(file.key)) && (
+          <MediaPreview
+            src={mediaURL}
+            type={getMimeTypeFromExtension(file.key)}
+          />
+        )}
         <Button
           variant="ghost"
           size="icon"
           className="size-8 text-muted-foreground/80"
           asChild
         >
-          <a href={downloadUrl} target="_blank" download>
+          <a href={mediaURL} target="_blank" download>
             <DownloadIcon className="size-3.5" />
           </a>
         </Button>
