@@ -12,25 +12,12 @@ import { useQueryState } from "nuqs";
 import { useCallback, useMemo } from "react";
 import { mutate } from "swr";
 
-// Constants moved outside component to prevent recreation
-const MEDIA_EXTENSIONS = new Set(["png", "jpg", "jpeg", "webp", "gif", "bmp"]);
-const PREVIEWABLE_CATEGORIES = new Set(["video", "audio", "image"]);
-
 // Date formatter - created once and reused
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
   year: "numeric",
 });
-
-// Helper function to check if file can be previewed
-const canPreviewFile = (fileKey: string, category: string): boolean => {
-  if (!PREVIEWABLE_CATEGORIES.has(category)) return false;
-  if (category !== "image") return true;
-
-  const extension = fileKey.split(".").pop()?.toLowerCase();
-  return extension ? MEDIA_EXTENSIONS.has(extension) : false;
-};
 
 // Memoized FileItem component to prevent unnecessary re-renders
 const FileItem = ({
@@ -44,10 +31,6 @@ const FileItem = ({
   const mimeType = useMemo(
     () => getMimeTypeFromExtension(file.key),
     [file.key],
-  );
-  const canPreview = useMemo(
-    () => canPreviewFile(file.key, fileCategory),
-    [file.key, fileCategory],
   );
   const formattedDate = useMemo(
     () => dateFormatter.format(new Date(file.uploaded)),
