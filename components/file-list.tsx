@@ -6,7 +6,7 @@ import { getFileIcon } from "@/components/utils/file-icon";
 import { useCategoryFilter } from "@/hooks/use-category-filters";
 import { formatBytes } from "@/hooks/use-file-upload";
 import { getFileTypeCategory, getMimeTypeFromExtension } from "@/lib/mime-type";
-import { FILES_CACHE_KEY, useFiles } from "@/lib/use-files";
+import { FILES_CACHE_KEY, StorageObject, useFiles } from "@/lib/use-files";
 import { DownloadIcon, TrashIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useCallback, useMemo } from "react";
@@ -24,7 +24,7 @@ const FileItem = ({
   file,
   onDelete,
 }: {
-  file: any;
+  file: StorageObject;
   onDelete: (key: string) => void;
 }) => {
   const fileCategory = useMemo(() => getFileTypeCategory(file.key), [file.key]);
