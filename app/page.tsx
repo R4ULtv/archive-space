@@ -1,5 +1,11 @@
 import FileList from "@/components/file-list";
 import FileListSkeleton from "@/components/file-list-skeleton";
+import CategoryFilter, {
+  CategoryFilterSkeleton,
+} from "@/components/navigation/category";
+import LayoutFilter from "@/components/navigation/layout";
+import Search, { SearchSkeleton } from "@/components/navigation/search";
+import StorageUsage from "@/components/navigation/usage";
 import SignOut from "@/components/sign-out";
 import ThemeSwitch from "@/components/theme-switch";
 import UploadFiles from "@/components/upload-files";
@@ -24,6 +30,16 @@ export default function Home() {
       </header>
       <main className="space-y-8 mt-8">
         <UploadFiles />
+        <div className="flex items-center gap-2">
+          <StorageUsage />
+          <Suspense fallback={<SearchSkeleton />}>
+            <Search />
+          </Suspense>
+          <LayoutFilter />
+          <Suspense fallback={<CategoryFilterSkeleton />}>
+            <CategoryFilter />
+          </Suspense>
+        </div>
         <Suspense fallback={<FileListSkeleton />}>
           <FileList />
         </Suspense>
