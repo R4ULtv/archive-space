@@ -9,15 +9,12 @@ export default function Search() {
   const [search, setSearch] = useQueryState("search", { defaultValue: "" });
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleKeyDown = React.useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        inputRef.current?.focus();
-      }
-    },
-    [setSearch],
-  );
+  const handleKeyDown = React.useCallback((e: KeyboardEvent) => {
+    if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      inputRef.current?.focus();
+    }
+  }, []);
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
