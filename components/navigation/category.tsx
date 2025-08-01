@@ -72,7 +72,12 @@ export default function CategoryFilter() {
                 onClick={handleClearFilters}
                 className="w-full h-8"
               >
-                <XIcon aria-hidden="true" /> Clear Filters
+                <XIcon
+                  className="-ms-1 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
+                Clear Filters
               </Button>
             </>
           )}
