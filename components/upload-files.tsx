@@ -1,9 +1,10 @@
 "use client";
 
-import { AlertCircleIcon, FileUpIcon } from "lucide-react";
+import { AlertCircleIcon, FileUpIcon, XIcon } from "lucide-react";
 import * as React from "react";
 import { mutate } from "swr";
 
+import { Button } from "@/components/ui/button";
 import { getFileIcon } from "@/components/utils/file-icon";
 import { ProgressIndicator } from "@/components/utils/progress-indicator";
 import {
@@ -304,18 +305,28 @@ export default function Component() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <ProgressIndicator progress={progress} />
-                  </div>
+                  {hasError ? (
+                    <div className="flex items-center gap-4">
+                      <div className="text-destructive flex items-center gap-1 text-xs">
+                        <AlertCircleIcon className="size-3 shrink-0" />
+                        <span>{hasError}</span>
+                      </div>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="text-muted-foreground/80 hover:text-foreground -me-2 size-8 hover:bg-transparent dark:hover:bg-transparent"
+                        onClick={() => removeFile(file.id)}
+                        aria-label="Remove file"
+                      >
+                        <XIcon className="size-4" aria-hidden="true" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <ProgressIndicator progress={progress} />
+                    </div>
+                  )}
                 </div>
-
-                {/* Error message */}
-                {hasError && (
-                  <div className="text-destructive flex items-center gap-1 text-xs">
-                    <AlertCircleIcon className="size-3 shrink-0" />
-                    <span>{hasError}</span>
-                  </div>
-                )}
               </div>
             );
           })}
