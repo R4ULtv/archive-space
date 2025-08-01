@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { getSession } from "@/lib/auth-client";
 
 export async function middleware(request: NextRequest) {
   const session = await fetch(
