@@ -9,9 +9,17 @@ import StorageUsage from "@/components/navigation/usage";
 import SignOut from "@/components/sign-out";
 import ThemeSwitch from "@/components/theme-switch";
 import UploadFiles from "@/components/upload-files";
+import { getSession } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/auth/sign-in");
+  }
+
   return (
     <div
       className="max-w-3xl py-16 px-6 mx-auto"
