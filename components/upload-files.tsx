@@ -429,9 +429,13 @@ export default function Component() {
                         <TooltipTrigger>
                           <ProgressIndicator progress={progress} />
                         </TooltipTrigger>
-                        <TooltipContent>
-                          {formatBytes(uploadStatus?.uploadSpeed || 0)}/s
-                        </TooltipContent>
+                        {uploadStatus?.uploadSpeed && uploadStatus.uploadSpeed > 0 && (
+                          <TooltipContent
+                            className="border bg-background text-muted-foreground shadow-xs dark:border-input px-2 py-1"
+                          >
+                            {formatBytes(uploadStatus.uploadSpeed)}/s
+                          </TooltipContent>
+                        )}
                       </Tooltip>
                     </div>
                   )}
