@@ -5,6 +5,7 @@ import * as React from "react";
 import { mutate } from "swr";
 
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { getFileIcon } from "@/components/utils/file-icon";
 import { ProgressIndicator } from "@/components/utils/progress-indicator";
 import {
@@ -424,7 +425,14 @@ export default function Component() {
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <ProgressIndicator progress={progress} />
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <ProgressIndicator progress={progress} />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {formatBytes(uploadStatus?.uploadSpeed || 0)}/s
+                        </TooltipContent>
+                      </Tooltip>
                     </div>
                   )}
                 </div>
