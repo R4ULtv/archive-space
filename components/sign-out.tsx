@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/lib/auth-client";
-import { LogOutIcon, Loader2Icon } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -13,20 +13,16 @@ export default function SignOut() {
   const handleSignOut = async () => {
     setIsLoading(true);
 
-    try {
-      await signOut({
-        fetchOptions: {
-          onSuccess: () => {
-            router.push("/auth/sign-in");
-          },
-          onError: () => {
-            setIsLoading(false);
-          },
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/auth/sign-in");
         },
-      });
-    } catch (error) {
-      setIsLoading(false);
-    }
+        onError: () => {
+          setIsLoading(false);
+        },
+      },
+    });
   };
 
   return (
