@@ -105,7 +105,6 @@ export default function Component() {
 
       // Step 2: Upload parts
       const uploadedParts: { partNumber: number; etag: string }[] = [];
-      let totalBytesUploaded = 0;
 
       for (let i = 0; i < totalChunks; i++) {
         const start = i * chunkSize;
@@ -158,9 +157,6 @@ export default function Component() {
           newMap.set(fileId, fileTimings);
           return newMap;
         });
-
-        // Update total bytes uploaded
-        totalBytesUploaded += currentChunkSize;
 
         // Calculate speeds and update progress
         const currentTimings = chunkTimings.get(fileId) || [];
