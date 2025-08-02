@@ -22,11 +22,7 @@ type UploadStatus = {
   completed: boolean;
   error?: string;
   uploading: boolean;
-  // Speed tracking properties
   uploadSpeed: number; // bytes per second
-  averageSpeed: number; // running average of speed
-  estimatedTimeRemaining: number; // seconds
-  totalBytesUploaded: number;
 };
 
 // Type for tracking chunk upload timing
@@ -51,31 +47,15 @@ export default function Component() {
   );
 
   // Helper function to calculate upload speed
-  const calculateSpeed = (timings: ChunkTiming[]): { currentSpeed: number; averageSpeed: number } => {
-    if (timings.length === 0) return { currentSpeed: 0, averageSpeed: 0 };
+  const calculateSpeed = (timings: ChunkTiming[]): number => {
+    if (timings.length === 0) return 0;
 
     // Calculate current speed from the last chunk
     const lastTiming = timings[timings.length - 1];
     const lastChunkDuration = (lastTiming.endTime - lastTiming.startTime) / 1000; // Convert to seconds
     const currentSpeed = lastChunkDuration > 0 ? lastTiming.chunkSize / lastChunkDuration : 0;
 
-    // Calculate average speed from all chunks
-    const totalBytes = timings.reduce((sum, timing) => sum + timing.chunkSize, 0);
-    const totalDuration = timings.reduce((sum, timing) => sum + (timing.endTime - timing.startTime), 0) / 1000;
-    const averageSpeed = totalDuration > 0 ? totalBytes / totalDuration : 0;
-
-    return { currentSpeed, averageSpeed };
-  };
-
-  // Helper function to estimate time remaining
-  const estimateTimeRemaining = (
-    totalFileSize: number,
-    uploadedBytes: number,
-    averageSpeed: number
-  ): number => {
-    if (averageSpeed <= 0) return 0;
-    const remainingBytes = totalFileSize - uploadedBytes;
-    return remainingBytes / averageSpeed;
+    return currentSpeed;
   };
 
   // Function to upload a single file using multipart upload
@@ -97,9 +77,6 @@ export default function Component() {
                 progress: 0, 
                 error: undefined,
                 uploadSpeed: 0,
-                averageSpeed: 0,
-                estimatedTimeRemaining: 0,
-                totalBytesUploaded: 0
               }
             : status,
         ),
@@ -192,9 +169,8 @@ export default function Component() {
           chunkSize: currentChunkSize
         });
 
-        const { currentSpeed, averageSpeed } = calculateSpeed(currentTimings);
+        const currentSpeed = calculateSpeed(currentTimings);
         const progress = Math.round(((i + 1) / totalChunks) * 100);
-        const timeRemaining = estimateTimeRemaining(file.size, totalBytesUploaded, averageSpeed);
 
         setUploadStatuses((prev) =>
           prev.map((status) =>
@@ -203,9 +179,6 @@ export default function Component() {
                   ...status, 
                   progress,
                   uploadSpeed: currentSpeed,
-                  averageSpeed: averageSpeed,
-                  estimatedTimeRemaining: timeRemaining,
-                  totalBytesUploaded: totalBytesUploaded
                 } 
               : status,
           ),
@@ -273,8 +246,6 @@ export default function Component() {
                 error: error instanceof Error ? error.message : "Upload failed",
                 progress: 0,
                 uploadSpeed: 0,
-                averageSpeed: 0,
-                estimatedTimeRemaining: 0,
               }
             : status,
         ),
@@ -299,9 +270,6 @@ export default function Component() {
         uploading: false,
         error: undefined,
         uploadSpeed: 0,
-        averageSpeed: 0,
-        estimatedTimeRemaining: 0,
-        totalBytesUploaded: 0,
       }));
 
       setUploadStatuses((prev) => [...prev, ...newStatuses]);
