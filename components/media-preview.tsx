@@ -111,9 +111,8 @@ export function MediaPreview({ src, type }: MediaPreviewProps) {
       </DialogTrigger>
       <DialogContent
         className={cn(
-          "p-0 border-none overflow-hidden w-auto",
-          mediaTypes.audio && "sm:max-w-xl max-h-32",
-          !mediaTypes.audio && "max-h-[94vh]",
+          "p-0 border-none overflow-hidden",
+          mediaTypes.audio ? "sm:max-w-xl max-h-32" : "w-auto sm:max-w-3xl max-h-[94vh]"
         )}
       >
         <DialogTitle className="sr-only">
