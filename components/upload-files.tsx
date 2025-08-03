@@ -424,7 +424,8 @@ export default function Component() {
                           <ProgressIndicator progress={progress} />
                         </TooltipTrigger>
                         <TooltipContent
-                          className="border bg-background text-muted-foreground shadow-xs dark:border-input px-2 py-1 [&_svg]:hidden"
+                          sideOffset={6}
+                          className="border bg-background text-muted-foreground shadow-xs dark:border-input px-2 py-1 [&_svg]:!hidden"
                         >
                           {uploadStatus ? formatBytes(uploadStatus.uploadSpeed) : 0}/s
                         </TooltipContent>
