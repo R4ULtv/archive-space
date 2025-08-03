@@ -72,13 +72,13 @@ export default function Component() {
       setUploadStatuses((prev) =>
         prev.map((status) =>
           status.fileId === fileId
-            ? { 
-                ...status, 
-                uploading: true, 
-                progress: 0, 
-                error: undefined,
-                uploadSpeed: 0,
-              }
+            ? {
+              ...status,
+              uploading: true,
+              progress: 0,
+              error: undefined,
+              uploadSpeed: 0,
+            }
             : status,
         ),
       );
@@ -171,12 +171,12 @@ export default function Component() {
 
         setUploadStatuses((prev) =>
           prev.map((status) =>
-            status.fileId === fileId 
-              ? { 
-                  ...status, 
-                  progress,
-                  uploadSpeed: currentSpeed,
-                } 
+            status.fileId === fileId
+              ? {
+                ...status,
+                progress,
+                uploadSpeed: currentSpeed,
+              }
               : status,
           ),
         );
@@ -209,13 +209,13 @@ export default function Component() {
       setUploadStatuses((prev) =>
         prev.map((status) =>
           status.fileId === fileId
-            ? { 
-                ...status, 
-                completed: true, 
-                uploading: false, 
-                progress: 100,
-                estimatedTimeRemaining: 0
-              }
+            ? {
+              ...status,
+              completed: true,
+              uploading: false,
+              progress: 100,
+              estimatedTimeRemaining: 0
+            }
             : status,
         ),
       );
@@ -238,12 +238,12 @@ export default function Component() {
         prev.map((status) =>
           status.fileId === fileId
             ? {
-                ...status,
-                uploading: false,
-                error: error instanceof Error ? error.message : "Upload failed",
-                progress: 0,
-                uploadSpeed: 0,
-              }
+              ...status,
+              uploading: false,
+              error: error instanceof Error ? error.message : "Upload failed",
+              progress: 0,
+              uploadSpeed: 0,
+            }
             : status,
         ),
       );
@@ -316,8 +316,6 @@ export default function Component() {
   const getUploadStatus = (fileId: string) => {
     return uploadStatuses.find((status) => status.fileId === fileId);
   };
-
-  console.log(uploadStatuses);
 
   return (
     <div className="flex flex-col gap-2">
@@ -425,13 +423,11 @@ export default function Component() {
                         <TooltipTrigger>
                           <ProgressIndicator progress={progress} />
                         </TooltipTrigger>
-                        {uploadStatus?.uploadSpeed && uploadStatus.uploadSpeed > 0 && (
-                          <TooltipContent
-                            className="border bg-background text-muted-foreground shadow-xs dark:border-input px-2 py-1"
-                          >
-                            {formatBytes(uploadStatus.uploadSpeed)}/s
-                          </TooltipContent>
-                        )}
+                        <TooltipContent
+                          className="border bg-background text-muted-foreground shadow-xs dark:border-input px-2 py-1 [&_svg]:hidden"
+                        >
+                          {uploadStatus ? formatBytes(uploadStatus.uploadSpeed) : 0}/s
+                        </TooltipContent>
                       </Tooltip>
                     </div>
                   )}
