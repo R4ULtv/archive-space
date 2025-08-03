@@ -21,10 +21,7 @@ export default async function Home() {
   }
 
   return (
-    <div
-      className="max-w-3xl py-16 px-6 mx-auto"
-      style={{ minHeight: "calc(100vh - 45px)" }}
-    >
+    <div className="max-w-3xl py-8 md:py-16 px-4 md:px-6 mx-auto">
       <header className="flex items-start justify-between">
         <div className="flex flex-col items-start">
           <span className="text-base inline-block font-medium no-underline font-mono">
@@ -36,7 +33,7 @@ export default async function Home() {
           <SignOut />
         </div>
       </header>
-      <main className="space-y-8 mt-8">
+      <main className="space-y-4 md:space-y-8 mt-4 md:mt-8">
         <UploadFiles />
         <div className="flex items-center gap-2">
           <StorageUsage />
