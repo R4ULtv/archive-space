@@ -399,7 +399,7 @@ export const useFileUpload = (
   ]
 }
 
-// Helper function to format bytes to human-readable format
+// Helper function to format bytes to human-readable format.
 export const formatBytes = (bytes: number, decimals = 2): string => {
   if (bytes === 0) return "0 Bytes"
 
@@ -411,3 +411,20 @@ export const formatBytes = (bytes: number, decimals = 2): string => {
 
   return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + sizes[i]
 }
+
+// Helper function are used to display upload speeds in a human-readable format.
+
+export const formatSpeed = (bytesPerSecond: number, decimals = 2): string => {
+  if (bytesPerSecond === 0) return "0 Kbps";
+  const bitsPerSecond = bytesPerSecond * 8;
+
+  if (bitsPerSecond < 1_000_000) {
+    // Less than 1 Mbps, show as Kbps
+    const kbps = bitsPerSecond / 1_000;
+    return `${kbps.toFixed(decimals)} Kbps`;
+  } else {
+    // 1 Mbps or more, show as Mbps
+    const mbps = bitsPerSecond / 1_000_000;
+    return `${mbps.toFixed(decimals)} Mbps`;
+  }
+};
