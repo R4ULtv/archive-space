@@ -10,6 +10,7 @@ import { getFileIcon } from "@/components/utils/file-icon";
 import { ProgressIndicator } from "@/components/utils/progress-indicator";
 import {
   formatBytes,
+  formatSpeed,
   useFileUpload,
   type FileWithPreview,
 } from "@/hooks/use-file-upload";
@@ -427,7 +428,7 @@ export default function Component() {
                           sideOffset={6}
                           className="border bg-background text-muted-foreground shadow-xs dark:border-input px-2 py-1 [&_svg]:!hidden"
                         >
-                          {uploadStatus ? formatBytes(uploadStatus.uploadSpeed) : 0}/s
+                          {formatSpeed(uploadStatus?.uploadSpeed || 0)}
                         </TooltipContent>
                       </Tooltip>
                     </div>
