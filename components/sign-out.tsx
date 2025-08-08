@@ -29,7 +29,7 @@ export default function SignOut() {
     <Button
       size="sm"
       variant="ghost"
-      className="size-8"
+      className="size-8 group"
       onClick={handleSignOut}
       disabled={isLoading}
     >
@@ -61,7 +61,10 @@ export default function SignOut() {
           />
         </svg>
       ) : (
-        <LogOutIcon />
+        <LogOutIcon
+          className="group-hover:translate-x-[1px] group-hover:scale-110 transition-[scale,translate] duration-200 ease-out"
+          aria-hidden="true" 
+        />
       )}
     </Button>
   );
