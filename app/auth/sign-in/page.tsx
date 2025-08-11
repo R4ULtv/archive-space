@@ -92,7 +92,7 @@ export default function SignInPage() {
                         variant="outline"
                         className="w-full gap-2"
                         disabled={loading}
-                        onClick={() => handleSignIn("github")}
+                        onClick={() => handleSignIn("google")}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
