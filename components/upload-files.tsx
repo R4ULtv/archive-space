@@ -5,7 +5,11 @@ import * as React from "react";
 import { mutate } from "swr";
 
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { getFileIcon } from "@/components/utils/file-icon";
 import { ProgressIndicator } from "@/components/utils/progress-indicator";
 import {
@@ -44,9 +48,9 @@ export default function Component() {
   );
 
   // Track chunk timings for speed calculation
-  const [chunkTimings, setChunkTimings] = React.useState<Map<string, ChunkTiming[]>>(
-    new Map()
-  );
+  const [chunkTimings, setChunkTimings] = React.useState<
+    Map<string, ChunkTiming[]>
+  >(new Map());
 
   // Helper function to calculate upload speed
   const calculateSpeed = (timings: ChunkTiming[]): number => {
@@ -54,8 +58,10 @@ export default function Component() {
 
     // Calculate current speed from the last chunk
     const lastTiming = timings[timings.length - 1];
-    const lastChunkDuration = (lastTiming.endTime - lastTiming.startTime) / 1000; // Convert to seconds
-    const currentSpeed = lastChunkDuration > 0 ? lastTiming.chunkSize / lastChunkDuration : 0;
+    const lastChunkDuration =
+      (lastTiming.endTime - lastTiming.startTime) / 1000; // Convert to seconds
+    const currentSpeed =
+      lastChunkDuration > 0 ? lastTiming.chunkSize / lastChunkDuration : 0;
 
     return currentSpeed;
   };
@@ -66,7 +72,7 @@ export default function Component() {
     const totalChunks = Math.ceil(file.size / chunkSize);
 
     // Initialize chunk timings for this file
-    setChunkTimings(prev => new Map(prev).set(fileId, []));
+    setChunkTimings((prev) => new Map(prev).set(fileId, []));
 
     try {
       // Initialize upload status
@@ -74,12 +80,12 @@ export default function Component() {
         prev.map((status) =>
           status.fileId === fileId
             ? {
-              ...status,
-              uploading: true,
-              progress: 0,
-              error: undefined,
-              uploadSpeed: 0,
-            }
+                ...status,
+                uploading: true,
+                progress: 0,
+                error: undefined,
+                uploadSpeed: 0,
+              }
             : status,
         ),
       );
@@ -147,13 +153,13 @@ export default function Component() {
         });
 
         // Update chunk timings
-        setChunkTimings(prev => {
+        setChunkTimings((prev) => {
           const newMap = new Map(prev);
           const fileTimings = newMap.get(fileId) || [];
           fileTimings.push({
             startTime: chunkStartTime,
             endTime: chunkEndTime,
-            chunkSize: currentChunkSize
+            chunkSize: currentChunkSize,
           });
           newMap.set(fileId, fileTimings);
           return newMap;
@@ -164,7 +170,7 @@ export default function Component() {
         currentTimings.push({
           startTime: chunkStartTime,
           endTime: chunkEndTime,
-          chunkSize: currentChunkSize
+          chunkSize: currentChunkSize,
         });
 
         const currentSpeed = calculateSpeed(currentTimings);
@@ -174,10 +180,10 @@ export default function Component() {
           prev.map((status) =>
             status.fileId === fileId
               ? {
-                ...status,
-                progress,
-                uploadSpeed: currentSpeed,
-              }
+                  ...status,
+                  progress,
+                  uploadSpeed: currentSpeed,
+                }
               : status,
           ),
         );
@@ -211,18 +217,18 @@ export default function Component() {
         prev.map((status) =>
           status.fileId === fileId
             ? {
-              ...status,
-              completed: true,
-              uploading: false,
-              progress: 100,
-              estimatedTimeRemaining: 0
-            }
+                ...status,
+                completed: true,
+                uploading: false,
+                progress: 100,
+                estimatedTimeRemaining: 0,
+              }
             : status,
         ),
       );
 
       // Clean up chunk timings for completed file
-      setChunkTimings(prev => {
+      setChunkTimings((prev) => {
         const newMap = new Map(prev);
         newMap.delete(fileId);
         return newMap;
@@ -239,17 +245,17 @@ export default function Component() {
         prev.map((status) =>
           status.fileId === fileId
             ? {
-              ...status,
-              uploading: false,
-              error: error instanceof Error ? error.message : "Upload failed",
-              progress: 0,
-              uploadSpeed: 0,
-            }
+                ...status,
+                uploading: false,
+                error: error instanceof Error ? error.message : "Upload failed",
+                progress: 0,
+                uploadSpeed: 0,
+              }
             : status,
         ),
       );
 
-      setChunkTimings(prev => {
+      setChunkTimings((prev) => {
         const newMap = new Map(prev);
         newMap.delete(fileId);
         return newMap;
@@ -287,7 +293,7 @@ export default function Component() {
     setUploadStatuses((prev) =>
       prev.filter((status) => status.fileId !== fileId),
     );
-    setChunkTimings(prev => {
+    setChunkTimings((prev) => {
       const newMap = new Map(prev);
       newMap.delete(fileId);
       return newMap;
