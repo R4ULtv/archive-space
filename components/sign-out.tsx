@@ -63,7 +63,7 @@ export default function SignOut() {
       ) : (
         <LogOutIcon
           className="group-hover:translate-x-[1px] group-hover:scale-110 transition-[scale,translate] duration-200 ease-out"
-          aria-hidden="true" 
+          aria-hidden="true"
         />
       )}
     </Button>

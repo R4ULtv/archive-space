@@ -43,7 +43,7 @@
     --radius-xl: calc(var(--radius) + 4px);
 }
 
-.bg-grid-small{
+.bg-grid-small {
     background: var(--grid-small);
 }
 

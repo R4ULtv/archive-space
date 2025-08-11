@@ -99,9 +99,7 @@ export default function StorageUsage() {
       </PopoverTrigger>
       <PopoverContent className="w-64 p-3" align="start" sideOffset={6}>
         <div className="space-y-1.5">
-          <div className="text-muted-foreground text-xs font-medium">
-            Usage
-          </div>
+          <div className="text-muted-foreground text-xs font-medium">Usage</div>
           <div className="space-y-1.5">
             <div className="flex justify-between gap-2 text-[13px] text-muted-foreground">
               <span>
