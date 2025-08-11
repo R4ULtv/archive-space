@@ -45,7 +45,7 @@ export default async function Home() {
             <CategoryFilter />
           </Suspense>
         </div>
-        <Suspense fallback={<FileListSkeleton />}>
+        <Suspense fallback={<FileListSkeleton count={8} />}>
           <FileList />
         </Suspense>
       </main>
