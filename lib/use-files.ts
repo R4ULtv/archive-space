@@ -17,6 +17,7 @@ export const useFiles = () => {
     fetcher,
     {
       revalidateOnFocus: false,
+      refreshInterval: 120000, // 2 minutes
     },
   );
 
