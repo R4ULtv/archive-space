@@ -11,6 +11,7 @@ import {
   isPreviewSupported,
 } from "@/lib/mime-type";
 import { FILES_CACHE_KEY, StorageObject, useFiles } from "@/lib/use-files";
+import { cn } from "@/lib/utils";
 import { DownloadIcon, TrashIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useQueryState } from "nuqs";
@@ -21,29 +22,18 @@ const MediaPreview = dynamic(() =>
   import("../components/media-preview").then((mod) => mod.MediaPreview),
 );
 
-// Date formatter - created once and reused
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-});
-
-// Memoized FileItem component to prevent unnecessary re-renders
 const FileItem = ({
   file,
   onDelete,
+  isGrid = false,
 }: {
   file: StorageObject;
   onDelete: (key: string) => void;
+  isGrid?: boolean;
 }) => {
-  const fileCategory = useMemo(() => getFileTypeCategory(file.key), [file.key]);
   const mimeType = useMemo(
     () => getMimeTypeFromExtension(file.key),
     [file.key],
-  );
-  const formattedDate = useMemo(
-    () => dateFormatter.format(new Date(file.uploaded)),
-    [file.uploaded],
   );
   const mediaURL = useMemo(
     () => `${FILES_CACHE_KEY}/${encodeURIComponent(file.key)}`,
@@ -55,9 +45,24 @@ const FileItem = ({
   }, [file.key, onDelete]);
 
   return (
-    <div className="bg-background flex items-center justify-between gap-2 rounded-lg border p-2 pe-3">
-      <div className="flex items-center gap-3 overflow-hidden">
-        <div className="flex aspect-square size-10 shrink-0 items-center justify-center rounded border">
+    <div
+      className={cn(
+        "flex items-center justify-between gap-2 rounded-lg border p-2 pe-3",
+        isGrid && "flex-col",
+      )}
+    >
+      <div
+        className={cn(
+          "flex items-center gap-3 overflow-hidden",
+          isGrid && "flex-col",
+        )}
+      >
+        <div
+          className={cn(
+            "flex aspect-square shrink-0 items-center justify-center rounded border",
+            isGrid ? "size-12 [&_svg]:size-5" : "size-10",
+          )}
+        >
           {getFileIcon({
             file: {
               name: mediaURL,
@@ -65,10 +70,22 @@ const FileItem = ({
             },
           })}
         </div>
-        <div className="flex min-w-0 flex-col gap-0.5">
-          <p className="truncate text-[13px] font-medium">{file.key}</p>
+        <div
+          className={cn(
+            "flex min-w-0 flex-col gap-0.5",
+            isGrid && "items-center",
+          )}
+        >
+          <p className="truncate text-[13px] font-medium max-w-28">
+            {file.key}
+          </p>
           <p className="text-muted-foreground text-xs">
-            {formattedDate} · {fileCategory} · {formatBytes(file.size)}
+            {new Date(file.uploaded).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}{" "}
+            · {formatBytes(file.size)}
           </p>
         </div>
       </div>
@@ -107,16 +124,13 @@ export default function FileList() {
   const { categories } = useCategoryFilter();
   const { files, error, isLoading } = useFiles();
 
-  // Memoized file processing and filtering
   const processedFiles = useMemo(() => {
     if (!files || files.length === 0) return [];
 
-    // Sort files by upload date (newest first)
     const sortedFiles = [...files].sort(
       (a, b) => new Date(b.uploaded).getTime() - new Date(a.uploaded).getTime(),
     );
 
-    // Filter files based on search and category
     return sortedFiles.filter((file) => {
       const matchesSearch = file.key
         .toLowerCase()
@@ -130,7 +144,6 @@ export default function FileList() {
     });
   }, [files, search, categories]);
 
-  // Memoized delete handler to prevent recreation on every render
   const handleDelete = useCallback(async (key: string) => {
     try {
       await fetch(`${FILES_CACHE_KEY}/${encodeURIComponent(key)}`, {
@@ -143,7 +156,6 @@ export default function FileList() {
     }
   }, []);
 
-  // Early returns for loading and error states
   if (error) {
     return (
       <div className="w-full space-y-2">
@@ -160,7 +172,6 @@ export default function FileList() {
     return <FileListSkeleton count={8} />;
   }
 
-  // No files case
   if (!files || files.length === 0) {
     return (
       <div className="w-full space-y-2">
