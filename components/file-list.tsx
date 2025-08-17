@@ -76,7 +76,7 @@ const FileItem = ({
             isGrid && "items-center",
           )}
         >
-          <p className="truncate text-[13px] font-medium max-w-28">
+          <p className="truncate text-[13px] font-medium md:max-w-28">
             {file.key}
           </p>
           <p className="text-muted-foreground text-xs">
