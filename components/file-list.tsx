@@ -47,7 +47,7 @@ const FileItem = ({
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-2 rounded-lg border p-2 pe-3",
+        "hidden md:flex items-center justify-between gap-2 rounded-lg border p-2 pe-3",
         isGrid && "flex-col",
       )}
     >
