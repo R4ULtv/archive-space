@@ -3,7 +3,6 @@ import FileListSkeleton from "@/components/file-list-skeleton";
 import CategoryFilter, {
   CategoryFilterSkeleton,
 } from "@/components/navigation/category";
-import LayoutFilter from "@/components/navigation/layout";
 import Search, { SearchSkeleton } from "@/components/navigation/search";
 import StorageUsage from "@/components/navigation/usage";
 import SignOut from "@/components/sign-out";
@@ -21,7 +20,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="max-w-3xl py-8 md:py-16 px-4 md:px-6 mx-auto">
+    <div className="max-w-3xl py-8 md:py-16 px-2 md:px-6 mx-auto">
       <header className="flex items-start justify-between">
         <div className="flex flex-col items-start">
           <span className="text-base inline-block font-medium no-underline font-mono">
@@ -40,7 +39,6 @@ export default async function Home() {
           <Suspense fallback={<SearchSkeleton />}>
             <Search />
           </Suspense>
-          <LayoutFilter />
           <Suspense fallback={<CategoryFilterSkeleton />}>
             <CategoryFilter />
           </Suspense>
