@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Archive Space
 
-## Getting Started
+<img alt="Archive Space - Personal Archive System" src="https://www.raulcarini.dev/api/dynamic-og?title=Archive%20Space&description=Modern%20Archive%20System%20with%20Cloudflare%20Workers%2C%20R2%2C%20and%20Better%20Auth">
 
-First, run the development server:
+Archive Space is a modern, self-hosted file archive system.
+It provides **cloud storage, search, preview, and organization features** built on **Cloudflare Workers, R2, KV, D1, and Next.js**.
+
+The new architecture focuses on **speed, scalability, and security**, while keeping a simple, user-friendly UI.
+
+---
+
+## ✨ Features
+
+- 🔒 **Authentication & Security**
+
+  - Google/Github sign-in with [Better Auth](https://better-auth.com)
+  - Middleware session checks
+  - Restrict access to specific users by email
+
+- 📁 **File Management**
+
+  - Upload, download, and organize files by categories & tags
+  - Search bar for instant file lookups
+  - Filter by category
+  - Grid/list layout switch
+  - Upload speed tooltip
+
+- 🎬 **Previews & Media**
+
+  - Image, audio, and video previews (Google Drive–style)
+  - Built-in media player
+  - Partial content serving (HTTP 200/206)
+  - Navigate with arrow keys
+
+- 📊 **Stats & Optimization**
+
+  - Usage & cost stats visible outside free tier
+  - Optimized chunk sizes for faster file serving
+  - KV for caching
+  - D1 for persistent data storage
+
+---
+
+## 🏗️ Architecture
+
+- **Next.js** → Serves client/static files & session checks
+- **Cloudflare Workers (Hono.js)** → Handles APIs (auth, files, caching)
+- **Cloudflare R2** → File storage (per org)
+- **Cloudflare KV** → Caching layer
+- **D1 or Supabase** → Persistent database for metadata
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+
+- **Node.js LTS**: [Download](https://nodejs.org/en/download/package-manager)
+- **Cloudflare account** (Free or Paid): [Sign up](https://www.cloudflare.com/)
+
+### 2. Cloudflare Setup
+
+- Create an **R2 bucket** (one per organization if needed)
+- Create a **KV namespace** for caching
+- Create a **D1 database** for the auth data
+- Create an **API token** with access to D1
+
+### 3. Cloudflare Worker
+
+- Deploy a Worker using [Hono.js](https://hono.dev)
+- The Worker handles file uploads/downloads, auth, and APIs
+
+### 4. Environment Variables
+
+Create a `.env.local` in the project root, based on `.env.example`.
+Fill in credentials for Cloudflare, Supabase/D1, and Better Auth.
+
+### 5. Install & Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone repository
+git clone https://github.com/r4ultv/archive-space.git
+cd archive-space
+
+# Install dependencies
+pnpm install
+
+# Start dev server
+pnpm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit → `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📸 Screenshots
 
-## Learn More
+*(Add screenshots/gifs here to show previews, search, media player, etc.)*
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* [Next.js](https://nextjs.org/)
+* [TypeScript](https://www.typescriptlang.org/)
+* [Cloudflare Workers](https://developers.cloudflare.com/workers/) + [Hono.js](https://hono.dev)
+* [Cloudflare R2](https://developers.cloudflare.com/r2/)
+* [Cloudflare KV](https://developers.cloudflare.com/kv/)
+* [Cloudflare D1](https://developers.cloudflare.com/d1/) / [Supabase](https://supabase.com/)
+* [Better Auth](https://better-auth.com)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📌 Roadmap
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] Sharing links with permissions
+- [ ] File Metadata support
+- [ ] Folders
+- [ ] Organizations (1 bucket for each)
+
+---
+
+## 📄 License
+
+MIT © [Raul Carini](https://raulcarini.dev)
