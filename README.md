@@ -7,8 +7,6 @@ It provides **cloud storage, search, preview, and organization features** built 
 
 The new architecture focuses on **speed, scalability, and security**, while keeping a simple, user-friendly UI.
 
----
-
 ## ✨ Features
 
 - 🔒 **Authentication & Security**
@@ -39,8 +37,6 @@ The new architecture focuses on **speed, scalability, and security**, while keep
   - KV for caching
   - D1 for persistent data storage
 
----
-
 ## 🏗️ Architecture
 
 - **Next.js** → Serves client/static files & session checks
@@ -48,8 +44,6 @@ The new architecture focuses on **speed, scalability, and security**, while keep
 - **Cloudflare R2** → File storage (per org)
 - **Cloudflare KV** → Caching layer
 - **D1 or Supabase** → Persistent database for metadata
-
----
 
 ## 🚀 Getting Started
 
@@ -91,14 +85,6 @@ pnpm run dev
 
 Visit → `http://localhost:3000`
 
----
-
-## 📸 Screenshots
-
-*(Add screenshots/gifs here to show previews, search, media player, etc.)*
-
----
-
 ## 🛠️ Tech Stack
 
 * [Next.js](https://nextjs.org/)
@@ -109,16 +95,12 @@ Visit → `http://localhost:3000`
 * [Cloudflare D1](https://developers.cloudflare.com/d1/) / [Supabase](https://supabase.com/)
 * [Better Auth](https://better-auth.com)
 
----
-
 ## 📌 Roadmap
 
 - [ ] Sharing links with permissions
 - [ ] File Metadata support
 - [ ] Folders
 - [ ] Organizations (1 bucket for each)
-
----
 
 ## 📄 License
 
