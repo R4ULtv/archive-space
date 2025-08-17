@@ -47,7 +47,7 @@ const FileItem = ({
   return (
     <div
       className={cn(
-        "hidden md:flex items-center justify-between gap-2 rounded-lg border p-2 pe-3",
+        "flex items-center justify-between gap-2 rounded-lg border p-2 pe-3",
         isGrid && "flex-col",
       )}
     >
@@ -76,7 +76,7 @@ const FileItem = ({
             isGrid && "items-center",
           )}
         >
-          <p className="truncate text-[13px] font-medium md:max-w-28">
+          <p className="truncate text-[13px] font-medium max-w-28 md:max-w-full">
             {file.key}
           </p>
           <p className="text-muted-foreground text-xs">
