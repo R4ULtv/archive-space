@@ -43,7 +43,7 @@ The new architecture focuses on **speed, scalability, and security**, while keep
 - **Cloudflare Workers (Hono.js)** → Handles APIs (auth, files, caching)
 - **Cloudflare R2** → File storage (per org)
 - **Cloudflare KV** → Caching layer
-- **D1 or Supabase** → Persistent database for metadata
+- **Cloudflare D1** → Persistent database for metadata
 
 ## 🚀 Getting Started
 
@@ -67,7 +67,7 @@ The new architecture focuses on **speed, scalability, and security**, while keep
 ### 4. Environment Variables
 
 Create a `.env.local` in the project root, based on `.env.example`.
-Fill in credentials for Cloudflare, Supabase/D1, and Better Auth.
+Fill in credentials for Cloudflare and Better Auth.
 
 ### 5. Install & Run
 
@@ -92,7 +92,7 @@ Visit → `http://localhost:3000`
 * [Cloudflare Workers](https://developers.cloudflare.com/workers/) + [Hono.js](https://hono.dev)
 * [Cloudflare R2](https://developers.cloudflare.com/r2/)
 * [Cloudflare KV](https://developers.cloudflare.com/kv/)
-* [Cloudflare D1](https://developers.cloudflare.com/d1/) / [Supabase](https://supabase.com/)
+* [Cloudflare D1](https://developers.cloudflare.com/d1/)
 * [Better Auth](https://better-auth.com)
 
 ## 📌 Roadmap
