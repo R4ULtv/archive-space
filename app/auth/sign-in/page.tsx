@@ -18,7 +18,7 @@ export default function SignInPage() {
     await signIn.social(
       {
         provider: provider,
-        callbackURL: "https://archive.raulcarini.dev",
+        callbackURL: process.env.NEXT_PUBLIC_HOST || "http://localhost:3000",
       },
       {
         onRequest: () => {

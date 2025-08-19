@@ -16,13 +16,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://archive.raulcarini.dev"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_HOST || "http://localhost:3000"),
   title: "Archive Space",
   description: "A simple archive space build for you by Raul Carini.",
   openGraph: {
     title: "Archive Space",
     description: "A simple archive space build for you by Raul Carini.",
-    url: "https://archive.raulcarini.dev",
+    url: process.env.NEXT_PUBLIC_HOST || "http://localhost:3000",
     images: [
       {
         url: `https://www.raulcarini.dev/api/dynamic-og?title=Archive%20Space&description=A%20simple%20archive%20space%20build%20for%20you%20by%20Raul%20Carini.`,
