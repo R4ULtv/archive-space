@@ -19,7 +19,7 @@ import {
   type FileWithPreview,
 } from "@/hooks/use-file-upload";
 import { calculateOptimalChunkSize } from "@/lib/optimal-chunk-size";
-import { FILES_CACHE_KEY } from "@/lib/use-files";
+import { FILES_CACHE_KEY, OBJECTS_CACHE_KEY } from "@/lib/use-files";
 
 // Type for tracking upload progress and status
 type UploadStatus = {
@@ -70,6 +70,7 @@ export default function Component() {
   const uploadFile = async (file: File, fileId: string): Promise<void> => {
     const chunkSize = calculateOptimalChunkSize(file.size);
     const totalChunks = Math.ceil(file.size / chunkSize);
+    const objectKey = file.name;
 
     // Initialize chunk timings for this file
     setChunkTimings((prev) => new Map(prev).set(fileId, []));
@@ -92,7 +93,7 @@ export default function Component() {
 
       // Step 1: Create multipart upload
       const createResponse = await fetch(
-        `${FILES_CACHE_KEY}/${encodeURIComponent(file.name)}?action=mpu-create`,
+        `${FILES_CACHE_KEY}/${encodeURIComponent(objectKey)}?action=mpu-create`,
         {
           method: "POST",
           headers: {
@@ -125,7 +126,7 @@ export default function Component() {
 
         const partResponse = await fetch(
           `${FILES_CACHE_KEY}/${encodeURIComponent(
-            file.name,
+            objectKey,
           )}?action=mpu-uploadpart&uploadId=${uploadId}&partNumber=${partNumber}`,
           {
             method: "PUT",
@@ -192,7 +193,7 @@ export default function Component() {
       // Step 3: Complete multipart upload
       const completeResponse = await fetch(
         `${FILES_CACHE_KEY}/${encodeURIComponent(
-          file.name,
+          objectKey,
         )}?action=mpu-complete&uploadId=${uploadId}`,
         {
           method: "POST",
@@ -235,7 +236,7 @@ export default function Component() {
       });
 
       // Refresh the file list cache
-      const revalidate = await mutate(FILES_CACHE_KEY);
+      const revalidate = await mutate(OBJECTS_CACHE_KEY);
       if (revalidate) handleFileRemoved(fileId);
     } catch (error) {
       console.error("Upload failed:", error);
