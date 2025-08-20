@@ -26,7 +26,7 @@ export default async function HomePage() {
 
   return (
     <div className="max-w-3xl py-8 md:py-16 px-2 md:px-6 mx-auto">
-      <header className="flex items-start justify-between">
+      <header className="flex items-center justify-between">
         <div className="flex gap-2 items-start">
           <Link
             href="/"
