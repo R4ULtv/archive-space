@@ -10,10 +10,22 @@ import {
   getMimeTypeFromExtension,
   isPreviewSupported,
 } from "@/lib/mime-type";
-import { FILES_CACHE_KEY, StorageObject, useFiles } from "@/lib/use-files";
+import {
+  FILES_CACHE_KEY,
+  OBJECTS_CACHE_KEY,
+  StorageObject,
+  useFiles,
+} from "@/lib/use-files";
 import { cn } from "@/lib/utils";
-import { DownloadIcon, TrashIcon } from "lucide-react";
+import {
+  DownloadIcon,
+  FolderClosedIcon,
+  FolderOpenIcon,
+  TrashIcon,
+} from "lucide-react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useQueryState } from "nuqs";
 import { useCallback, useMemo } from "react";
 import { mutate } from "swr";
@@ -119,10 +131,41 @@ const FileItem = ({
   );
 };
 
+const FolderItem = ({
+  folder,
+  current = false,
+  isGrid = false,
+}: {
+  folder: string;
+  current?: boolean;
+  isGrid?: boolean;
+}) => (
+  <Link
+    href={folder}
+    className="flex items-center justify-between gap-2 rounded-lg border p-2 pe-3"
+  >
+    <div className="flex items-center gap-3 overflow-hidden">
+      <div className="flex aspect-square shrink-0 items-center justify-center rounded border size-10">
+        {current ? (
+          <FolderOpenIcon className="size-4 opacity-60" />
+        ) : (
+          <FolderClosedIcon className="size-4 opacity-60" />
+        )}
+      </div>
+      <div className="flex min-w-0 flex-col gap-0.5">
+        <p className="truncate text-[13px] font-medium max-w-28 md:max-w-full">
+          {folder}
+        </p>
+      </div>
+    </div>
+  </Link>
+);
+
 export default function FileList() {
   const [search] = useQueryState("search", { defaultValue: "" });
   const { categories } = useCategoryFilter();
-  const { files, error, isLoading } = useFiles();
+  const { folder } = useParams<{ folder: string | undefined }>();
+  const { files, folders, error, isLoading } = useFiles({ folder });
 
   const processedFiles = useMemo(() => {
     if (!files || files.length === 0) return [];
@@ -131,7 +174,15 @@ export default function FileList() {
       (a, b) => new Date(b.uploaded).getTime() - new Date(a.uploaded).getTime(),
     );
 
-    return sortedFiles.filter((file) => {
+    const sortedFilesWithoutFolder = sortedFiles.map((file) => {
+      const keyParts = file.key.split("/");
+      return {
+        ...file,
+        key: keyParts.length > 1 ? keyParts.slice(1).join("/") : file.key,
+      };
+    });
+
+    return sortedFilesWithoutFolder.filter((file) => {
       const matchesSearch = file.key
         .toLowerCase()
         .includes(search.toLowerCase());
@@ -150,7 +201,7 @@ export default function FileList() {
         method: "DELETE",
         credentials: "include",
       });
-      mutate(FILES_CACHE_KEY);
+      mutate(OBJECTS_CACHE_KEY);
     } catch (error) {
       console.error("Failed to delete file:", error);
     }
@@ -184,6 +235,8 @@ export default function FileList() {
 
   return (
     <div className="w-full space-y-2">
+      {folders &&
+        folders.map((folder) => <FolderItem key={folder} folder={folder} />)}
       {processedFiles.map((file) => (
         <FileItem key={file.key} file={file} onDelete={handleDelete} />
       ))}
