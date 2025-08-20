@@ -16,8 +16,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_HOST || "http://localhost:3000"),
-  title: "Archive Space",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_HOST || "http://localhost:3000",
+  ),
+  title: {
+    default: "Home - Archive Space",
+    template: "%s - Archive Space",
+  },
   description: "A simple archive space build for you by Raul Carini.",
   openGraph: {
     title: "Archive Space",
