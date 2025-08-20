@@ -20,7 +20,7 @@ import { getSession } from "@/lib/auth-client";
 export default async function HomePage() {
   const session = await getSession();
 
-  if (!session.data) {
+  if (!session) {
     redirect("/auth/sign-in");
   }
 
