@@ -142,10 +142,23 @@ const FolderItem = ({
 }) => (
   <Link
     href={folder}
-    className="flex items-center justify-between gap-2 rounded-lg border p-2 pe-3"
+    className={cn(
+      "flex items-center justify-between gap-2 rounded-lg border p-2 pe-3",
+      isGrid && "flex-col",
+    )}
   >
-    <div className="flex items-center gap-3 overflow-hidden">
-      <div className="flex aspect-square shrink-0 items-center justify-center rounded border size-10">
+    <div
+      className={cn(
+        "flex items-center gap-3 overflow-hidden",
+        isGrid && "flex-col",
+      )}
+    >
+      <div
+        className={cn(
+          "flex aspect-square shrink-0 items-center justify-center rounded border",
+          isGrid ? "size-12 [&_svg]:size-5" : "size-10",
+        )}
+      >
         {current ? (
           <FolderOpenIcon className="size-4 opacity-60" />
         ) : (
