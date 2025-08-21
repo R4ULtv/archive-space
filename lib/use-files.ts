@@ -9,6 +9,7 @@ const REFRESH_INTERVAL = 2 * 60 * 1000; // 2 min
 // Types
 export interface StorageObject {
   key: string;
+  name: string;
   size: number;
   etag: string;
   uploaded: string;
@@ -20,21 +21,19 @@ export interface Storage {
   folders: string[];
 }
 
-// Helper function to construct URL
-const buildStorageUrl = (folder?: string): string => {
+export const buildStorageUrl = (basePath?: string): string => {
   if (!OBJECTS_CACHE_KEY) {
     throw new Error(
       "NEXT_PUBLIC_AUTH_API_URL environment variable is not configured",
     );
   }
-
-  return folder ? `${OBJECTS_CACHE_KEY}/${folder}/` : OBJECTS_CACHE_KEY;
+  return basePath ? `${OBJECTS_CACHE_KEY}/${basePath}` : OBJECTS_CACHE_KEY;
 };
 
 // Main hook
-export const useFiles = ({ folder }: { folder?: string } = {}) => {
+export const useFiles = ({ basePath }: { basePath?: string } = {}) => {
   const { data, error, isLoading } = useSWR<Storage>(
-    buildStorageUrl(folder),
+    buildStorageUrl(basePath),
     fetcher,
     {
       revalidateOnFocus: false,
@@ -50,7 +49,9 @@ export const useFiles = ({ folder }: { folder?: string } = {}) => {
 
   return {
     files: data?.objects,
-    folders: data?.folders,
+    folders: data?.folders.map((folder) =>
+      folder.endsWith("/") ? folder.slice(0, -1) : folder,
+    ),
     isLoading,
     error,
   };
