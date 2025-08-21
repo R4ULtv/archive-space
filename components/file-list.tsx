@@ -11,8 +11,8 @@ import {
   isPreviewSupported,
 } from "@/lib/mime-type";
 import {
+  buildStorageUrl,
   FILES_CACHE_KEY,
-  OBJECTS_CACHE_KEY,
   StorageObject,
   useFiles,
 } from "@/lib/use-files";
@@ -89,7 +89,7 @@ const FileItem = ({
           )}
         >
           <p className="truncate text-[13px] font-medium max-w-28 md:max-w-full">
-            {file.key}
+            {file.name}
           </p>
           <p className="text-muted-foreground text-xs">
             {new Date(file.uploaded).toLocaleDateString("en-US", {
@@ -174,11 +174,10 @@ const FolderItem = ({
   </Link>
 );
 
-export default function FileList() {
+export default function FileList({ basePath }: { basePath?: string }) {
   const [search] = useQueryState("search", { defaultValue: "" });
   const { categories } = useCategoryFilter();
-  const { folder } = useParams<{ folder: string | undefined }>();
-  const { files, folders, error, isLoading } = useFiles({ folder });
+  const { files, folders, error, isLoading } = useFiles({ basePath });
 
   const processedFiles = useMemo(() => {
     if (!files || files.length === 0) return [];
@@ -187,15 +186,15 @@ export default function FileList() {
       (a, b) => new Date(b.uploaded).getTime() - new Date(a.uploaded).getTime(),
     );
 
-    const sortedFilesWithoutFolder = sortedFiles.map((file) => {
+    const filesWithName = sortedFiles.map((file) => {
       const keyParts = file.key.split("/");
       return {
         ...file,
-        key: keyParts.length > 1 ? keyParts.slice(1).join("/") : file.key,
+        name: keyParts.length > 1 ? keyParts[keyParts.length - 1] : file.key,
       };
     });
 
-    return sortedFilesWithoutFolder.filter((file) => {
+    return filesWithName.filter((file) => {
       const matchesSearch = file.key
         .toLowerCase()
         .includes(search.toLowerCase());
@@ -214,7 +213,7 @@ export default function FileList() {
         method: "DELETE",
         credentials: "include",
       });
-      mutate(OBJECTS_CACHE_KEY);
+      mutate(buildStorageUrl(basePath));
     } catch (error) {
       console.error("Failed to delete file:", error);
     }
