@@ -1,7 +1,6 @@
 "use client";
 
 import FileListSkeleton from "@/components/file-list-skeleton";
-import { LogoIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { getFileIcon } from "@/components/utils/file-icon";
 import { useCategoryFilter } from "@/hooks/use-category-filters";
