@@ -38,7 +38,7 @@ type ChunkTiming = {
   chunkSize: number;
 };
 
-export default function Component() {
+export default function UploadFiles({ basePath }: { basePath?: string }) {
   const maxSize = 5 * 1024 * 1024 * 1024; // 5GB default
   const maxFiles = 10;
 
@@ -70,7 +70,7 @@ export default function Component() {
   const uploadFile = async (file: File, fileId: string): Promise<void> => {
     const chunkSize = calculateOptimalChunkSize(file.size);
     const totalChunks = Math.ceil(file.size / chunkSize);
-    const objectKey = file.name;
+    const objectKey = basePath ? basePath + "/" + file.name : file.name;
 
     // Initialize chunk timings for this file
     setChunkTimings((prev) => new Map(prev).set(fileId, []));
@@ -236,7 +236,9 @@ export default function Component() {
       });
 
       // Refresh the file list cache
-      const revalidate = await mutate(OBJECTS_CACHE_KEY);
+      const revalidate = await mutate(
+        OBJECTS_CACHE_KEY + (basePath ? "/" + basePath : ""),
+      );
       if (revalidate) handleFileRemoved(fileId);
     } catch (error) {
       console.error("Upload failed:", error);
