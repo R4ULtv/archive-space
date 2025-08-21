@@ -1,6 +1,7 @@
 "use client";
 
 import FileListSkeleton from "@/components/file-list-skeleton";
+import { LogoIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { getFileIcon } from "@/components/utils/file-icon";
 import { useCategoryFilter } from "@/hooks/use-category-filters";
@@ -20,12 +21,11 @@ import { cn } from "@/lib/utils";
 import {
   DownloadIcon,
   FolderClosedIcon,
-  FolderOpenIcon,
   TrashIcon,
+  Undo2Icon,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useQueryState } from "nuqs";
 import { useCallback, useMemo } from "react";
 import { mutate } from "swr";
@@ -132,16 +132,18 @@ const FileItem = ({
 };
 
 const FolderItem = ({
-  folder,
+  path,
+  name,
   current = false,
   isGrid = false,
 }: {
-  folder: string;
+  path: string;
+  name: string;
   current?: boolean;
   isGrid?: boolean;
 }) => (
   <Link
-    href={folder}
+    href={!current ? path : "./"}
     className={cn(
       "flex items-center justify-between gap-2 rounded-lg border p-2 pe-3",
       isGrid && "flex-col",
@@ -160,14 +162,14 @@ const FolderItem = ({
         )}
       >
         {current ? (
-          <FolderOpenIcon className="size-4 opacity-60" />
+          <Undo2Icon className="size-4 opacity-60" />
         ) : (
           <FolderClosedIcon className="size-4 opacity-60" />
         )}
       </div>
       <div className="flex min-w-0 flex-col gap-0.5">
         <p className="truncate text-[13px] font-medium max-w-28 md:max-w-full">
-          {folder}
+          {name}
         </p>
       </div>
     </div>
@@ -235,20 +237,24 @@ export default function FileList({ basePath }: { basePath?: string }) {
     return <FileListSkeleton count={8} />;
   }
 
-  if (!files || files.length === 0) {
-    return (
-      <div className="w-full space-y-2">
-        <div className="text-center py-8">
-          <p className="text-muted-foreground">No files found</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full space-y-2">
+      {basePath && (
+        <FolderItem
+          key={basePath}
+          path={basePath}
+          name={basePath.split("/").slice(-2, -1)[0] || "root"}
+          current
+        />
+      )}
       {folders &&
-        folders.map((folder) => <FolderItem key={folder} folder={folder} />)}
+        folders.map((folder) => (
+          <FolderItem
+            key={folder}
+            path={folder}
+            name={basePath ? folder.replace(`${basePath}/`, "") : folder}
+          />
+        ))}
       {processedFiles.map((file) => (
         <FileItem key={file.key} file={file} onDelete={handleDelete} />
       ))}
