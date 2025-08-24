@@ -208,17 +208,20 @@ export default function FileList({ basePath }: { basePath?: string }) {
     });
   }, [files, search, categories]);
 
-  const handleDelete = useCallback(async (key: string) => {
-    try {
-      await fetch(`${FILES_CACHE_KEY}/${encodeURIComponent(key)}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      mutate(buildStorageUrl(basePath));
-    } catch (error) {
-      console.error("Failed to delete file:", error);
-    }
-  }, []);
+  const handleDelete = useCallback(
+    async (key: string) => {
+      try {
+        await fetch(`${FILES_CACHE_KEY}/${encodeURIComponent(key)}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+        mutate(buildStorageUrl(basePath));
+      } catch (error) {
+        console.error("Failed to delete file:", error);
+      }
+    },
+    [basePath],
+  );
 
   if (error) {
     return (
