@@ -144,7 +144,7 @@ const FolderItem = ({
   <Link
     href={!current ? path : "./"}
     className={cn(
-      "flex items-center justify-between gap-2 rounded-lg border p-2 pe-3",
+      "flex items-center justify-between gap-2 rounded-lg border p-2 pe-3 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
       isGrid && "flex-col",
     )}
   >
