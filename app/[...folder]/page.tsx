@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -18,7 +19,26 @@ import UploadFiles from "@/components/upload-files";
 
 import { getSession } from "@/lib/auth-client";
 
-export default async function HomePage() {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ folder: string[] }>;
+}): Promise<Metadata> {
+  const folderParams = (await params).folder;
+
+  return {
+    title:
+      folderParams[folderParams.length - 1].charAt(0).toUpperCase() +
+      folderParams[folderParams.length - 1].slice(1),
+  };
+}
+
+export default async function FolderPage({
+  params,
+}: {
+  params: Promise<{ folder: string[] }>;
+}) {
+  const folderParams = (await params).folder;
   const session = await getSession();
 
   if (!session) {
@@ -28,7 +48,7 @@ export default async function HomePage() {
   return (
     <div className="max-w-3xl py-8 md:py-16 px-2 md:px-6 mx-auto">
       <header className="flex items-center justify-between">
-        <div className="flex gap-2 items-start">
+        <div className="flex gap-1.5 items-center">
           <Link
             href="/"
             className="text-base inline-block font-medium no-underline font-mono"
@@ -42,7 +62,7 @@ export default async function HomePage() {
         </div>
       </header>
       <main className="space-y-4 md:space-y-8 mt-4 md:mt-8">
-        <UploadFiles />
+        <UploadFiles basePath={folderParams.join("/")} />
         <div className="flex items-center gap-2">
           <StorageUsage />
           <Suspense fallback={<SearchSkeleton />}>
@@ -51,10 +71,10 @@ export default async function HomePage() {
           <Suspense fallback={<CategoryFilterSkeleton />}>
             <CategoryFilter />
           </Suspense>
-          <NewFolder />
+          <NewFolder basePath={folderParams.join("/")} />
         </div>
         <Suspense fallback={<FileListSkeleton count={8} />}>
-          <FileList />
+          <FileList basePath={folderParams.join("/")} />
         </Suspense>
       </main>
     </div>
