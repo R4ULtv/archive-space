@@ -12,6 +12,7 @@ import CategoryFilter, {
 import Search, { SearchSkeleton } from "@/components/navigation/search";
 import StorageUsage from "@/components/navigation/usage";
 
+import { LogoIcon } from "@/components/icons";
 import NewFolder from "@/components/new-folder";
 import SignOut from "@/components/sign-out";
 import ThemeSwitch from "@/components/theme-switch";
@@ -46,14 +47,14 @@ export default async function FolderPage({
   }
 
   return (
-    <div className="max-w-3xl py-8 md:py-16 px-2 md:px-6 mx-auto">
+    <div className="max-w-3xl py-8 md:py-16 px-3 md:px-6 mx-auto">
       <header className="flex items-center justify-between">
         <div className="flex gap-1.5 items-center">
           <Link
             href="/"
-            className="text-base inline-block font-medium no-underline font-mono"
+            className="text-base flex items-center gap-2 font-medium"
           >
-            ARCHIVE SPACE
+            <LogoIcon /> Archive Space
           </Link>
         </div>
         <div className="shrink-0">
