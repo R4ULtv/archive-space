@@ -106,7 +106,7 @@ export default function NewFolder({ basePath }: { basePath?: string }) {
           <LogoIcon className="size-4" aria-hidden="true" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md outline-none">
         <div className="flex flex-col gap-2">
           <div
             className="flex size-11 shrink-0 items-center justify-center rounded-full border"
@@ -117,7 +117,7 @@ export default function NewFolder({ basePath }: { basePath?: string }) {
           <DialogHeader>
             <DialogTitle className="text-left">New Folder</DialogTitle>
             <DialogDescription className="text-left">
-              Enter a name for your new folder. Use &quot/&quot to create
+              Enter a name for your new folder. Use &quot;/&quot; to create
               subfolders. Special characters will be converted to URL-safe
               format.
             </DialogDescription>
@@ -140,7 +140,6 @@ export default function NewFolder({ basePath }: { basePath?: string }) {
                 placeholder="music, video/movies, documents/work..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="shadow-none focus-visible:ring-0"
                 onKeyDown={(e) => {
                   if (e.key === "Escape") {
                     handleClose();
