@@ -9,6 +9,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -142,9 +143,14 @@ export default function NewFolder({ basePath }: { basePath?: string }) {
               />
             </div>
           </div>
-          <Button disabled={isDisabled} type="submit" className="w-full">
-            Create Folder
-          </Button>
+          <DialogFooter>
+            <Button onClick={handleClose} variant="outline" className="flex-1">
+              Cancel
+            </Button>
+            <Button disabled={isDisabled} type="submit" className="flex-1">
+              Create Folder
+            </Button>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
