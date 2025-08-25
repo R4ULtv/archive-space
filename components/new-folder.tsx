@@ -14,7 +14,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 
 const isInputElement = (element: HTMLElement): boolean => {
   const tagName = element.tagName.toLowerCase();
@@ -111,8 +110,9 @@ export default function NewFolder({ basePath }: { basePath?: string }) {
           <DialogHeader>
             <DialogTitle className="text-left">New Folder</DialogTitle>
             <DialogDescription className="text-left">
-              Enter a name for your new folder. Use "/" to create subfolders.
-              Special characters will be converted to URL-safe format.
+              Enter a name for your new folder. Use &quot/&quot to create
+              subfolders. Special characters will be converted to URL-safe
+              format.
             </DialogDescription>
           </DialogHeader>
         </div>
