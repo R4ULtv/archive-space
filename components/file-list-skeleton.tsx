@@ -27,19 +27,28 @@ export default function FileListSkeleton({ count = 5 }: FileListSkeletonProps) {
                 }}
               />
               {/* File info skeleton - date · type · size */}
-              <div className="flex items-center gap-1">
-                <Skeleton className="h-3 w-16" />
-                <span className="text-muted-foreground text-xs">·</span>
-                <Skeleton className="h-3 w-8" />
-                <span className="text-muted-foreground text-xs">·</span>
-                <Skeleton className="h-3 w-10" />
-              </div>
+              {index >= 2 && (
+                <div className="flex items-center gap-1">
+                  <Skeleton className="h-3 w-16" />
+                  <span className="text-muted-foreground text-xs">·</span>
+                  <Skeleton className="h-3 w-8" />
+                  <span className="text-muted-foreground text-xs">·</span>
+                  <Skeleton className="h-3 w-10" />
+                </div>
+              )}
             </div>
           </div>
           <div className="flex items-center">
-            <div className="size-8 flex items-center justify-center">
-              <Skeleton className="size-4 rounded-lg" />
-            </div>
+            {index >= 2 && (
+              <>
+                <div className="size-8 flex items-center justify-center">
+                  <Skeleton className="size-4 rounded-lg" />
+                </div>
+                <div className="size-8 flex items-center justify-center">
+                  <Skeleton className="size-4 rounded-lg" />
+                </div>
+              </>
+            )}
             <div className="size-8 flex items-center justify-center">
               <Skeleton className="size-4 rounded-lg" />
             </div>
