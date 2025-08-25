@@ -60,7 +60,13 @@ export default function NewFolder({ basePath }: { basePath?: string }) {
 
     if (isInputElement(target)) return;
 
-    if (event.key.toLowerCase() === "c") {
+    if (
+      event.key.toLowerCase() === "c" &&
+      !event.ctrlKey &&
+      !event.altKey &&
+      !event.metaKey &&
+      !event.shiftKey
+    ) {
       event.preventDefault();
       setIsOpen(true);
     }
