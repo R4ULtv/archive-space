@@ -140,16 +140,16 @@ export default function NewFolder({ basePath }: { basePath?: string }) {
                 placeholder="music, video/movies, documents/work..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Escape") {
-                    handleClose();
-                  }
-                }}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={handleClose} variant="outline" className="flex-1">
+            <Button
+              onClick={handleClose}
+              type="button"
+              variant="outline"
+              className="flex-1"
+            >
               Cancel
             </Button>
             <Button disabled={isDisabled} type="submit" className="flex-1">
