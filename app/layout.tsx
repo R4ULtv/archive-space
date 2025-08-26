@@ -45,6 +45,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href={process.env.NEXT_PUBLIC_HOST} />
+      </head>
       <body
         className={`${geistMono.variable} ${geistSans.variable} antialiased selection:bg-primary/25`}
       >
