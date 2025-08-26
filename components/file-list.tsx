@@ -35,10 +35,12 @@ const MediaPreview = dynamic(() =>
 
 const FileItem = ({
   file,
+  basePath,
   onDelete,
   isGrid = false,
 }: {
   file: StorageObject;
+  basePath?: string;
   onDelete: (key: string) => void;
   isGrid?: boolean;
 }) => {
@@ -47,8 +49,11 @@ const FileItem = ({
     [file.key],
   );
   const mediaURL = useMemo(
-    () => `${FILES_CACHE_KEY}/${encodeURIComponent(file.key)}`,
-    [file.key],
+    () =>
+      basePath
+        ? `${FILES_CACHE_KEY}/${basePath}/${encodeURIComponent(file.name)}`
+        : `${FILES_CACHE_KEY}/${encodeURIComponent(file.name)}`,
+    [file.name, basePath],
   );
 
   const handleDeleteClick = useCallback(() => {
@@ -258,7 +263,12 @@ export default function FileList({ basePath }: { basePath?: string }) {
           />
         ))}
       {processedFiles.map((file) => (
-        <FileItem key={file.key} file={file} onDelete={handleDelete} />
+        <FileItem
+          key={file.key}
+          file={file}
+          basePath={basePath}
+          onDelete={handleDelete}
+        />
       ))}
     </div>
   );
