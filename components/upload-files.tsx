@@ -18,7 +18,6 @@ import {
   useFileUpload,
   type FileWithPreview,
 } from "@/hooks/use-file-upload";
-import { calculateOptimalChunkSize } from "@/lib/optimal-chunk-size";
 import { FILES_CACHE_KEY, OBJECTS_CACHE_KEY } from "@/lib/use-files";
 
 // Type for tracking upload progress and status
@@ -52,6 +51,18 @@ export default function UploadFiles({ basePath }: { basePath?: string }) {
     Map<string, ChunkTiming[]>
   >(new Map());
 
+  const calculateChunkSize = (fileSize: number): number => {
+    // Base chunk size on file size and connection speed
+    if (fileSize < 100 * 1024 * 1024) {
+      return Math.max(
+        5 * 1024 * 1024,
+        Math.min(100 * 1024 * 1024, fileSize / 4),
+      );
+    } else {
+      return Math.min(100 * 1024 * 1024, 50 * 1024 * 1024); // 50MB chunks
+    }
+  };
+
   // Helper function to calculate upload speed
   const calculateSpeed = (timings: ChunkTiming[]): number => {
     if (timings.length === 0) return 0;
@@ -68,7 +79,7 @@ export default function UploadFiles({ basePath }: { basePath?: string }) {
 
   // Function to upload a single file using multipart upload
   const uploadFile = async (file: File, fileId: string): Promise<void> => {
-    const chunkSize = calculateOptimalChunkSize(file.size);
+    const chunkSize = calculateChunkSize(file.size);
     const totalChunks = Math.ceil(file.size / chunkSize);
     const objectKey = basePath ? basePath + "/" + file.name : file.name;
 
