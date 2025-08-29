@@ -97,10 +97,11 @@ Visit → `http://localhost:3000`
 
 ## 📌 Roadmap
 
-- [ ] Sharing links with permissions
+- [x] Folders
+- [ ] Sharing files
 - [ ] File Metadata support
-- [ ] Folders
-- [ ] Organizations (1 bucket for each)
+- [ ] Organizations
+- [ ] Download folders
 
 ## 📄 License
 
