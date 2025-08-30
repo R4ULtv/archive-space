@@ -13,6 +13,7 @@ import {
   MediaPlayerControlsOverlay,
   MediaPlayerDownload,
   MediaPlayerFullscreen,
+  MediaPlayerLoop,
   MediaPlayerPlay,
   MediaPlayerSeek,
   MediaPlayerSeekBackward,
@@ -58,7 +59,9 @@ export function MediaPreview({ src, type }: MediaPreviewProps) {
     }
 
     return (
-      <MediaPlayer className={cn("h-auto w-full", mediaTypes.audio && "h-32")}>
+      <MediaPlayer
+        className={cn("h-auto w-full", mediaTypes.audio && "h-24 border")}
+      >
         {mediaTypes.video && (
           <MediaPlayerVideo crossOrigin="use-credentials" preload="metadata">
             <source src={src} type={type} />
@@ -75,20 +78,31 @@ export function MediaPreview({ src, type }: MediaPreviewProps) {
           </MediaPlayerAudio>
         )}
 
-        <MediaPlayerControls className="flex-col items-start gap-2.5">
+        <MediaPlayerControls className="flex-col items-start gap-2.5 py-4">
           <MediaPlayerControlsOverlay />
-          <MediaPlayerSeek withTime />
-          <div className="flex w-full items-center gap-2">
-            <div className="flex flex-1 items-center gap-2">
+          <MediaPlayerSeek withTime={mediaTypes.audio} />
+          <div
+            className={cn(
+              "flex w-full items-center gap-2",
+              mediaTypes.audio && "justify-center",
+            )}
+          >
+            <div
+              className={cn(
+                "flex items-center gap-2",
+                mediaTypes.audio ? "justify-center" : "flex-1",
+              )}
+            >
+              {mediaTypes.audio && <MediaPlayerSeekBackward />}
               <MediaPlayerPlay />
-              <MediaPlayerSeekBackward />
+              {mediaTypes.video && <MediaPlayerSeekBackward />}
               <MediaPlayerSeekForward />
-              <MediaPlayerVolume expandable />
+              <MediaPlayerVolume expandable={mediaTypes.video} />
               {mediaTypes.video && <MediaPlayerTime />}
             </div>
             <div className="flex items-center gap-2">
-              <MediaPlayerDownload />
               <PlaybackSpeed />
+              {mediaTypes.audio && <MediaPlayerLoop />}
               {mediaTypes.video && <MediaPlayerFullscreen />}
             </div>
           </div>
@@ -111,9 +125,9 @@ export function MediaPreview({ src, type }: MediaPreviewProps) {
       </DialogTrigger>
       <DialogContent
         className={cn(
-          "p-0 border-none overflow-hidden",
+          "p-0 border-none overflow-hidden [&>[data-slot='dialog-close']]:hidden",
           mediaTypes.audio
-            ? "sm:max-w-xl max-h-32"
+            ? "sm:max-w-xl"
             : "w-auto sm:max-w-[95vw] max-h-[95vh] flex items-center justify-center",
         )}
       >
