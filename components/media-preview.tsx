@@ -11,7 +11,6 @@ import {
   MediaPlayerAudio,
   MediaPlayerControls,
   MediaPlayerControlsOverlay,
-  MediaPlayerDownload,
   MediaPlayerFullscreen,
   MediaPlayerLoop,
   MediaPlayerPlay,
@@ -131,12 +130,9 @@ export function MediaPreview({ src, type }: MediaPreviewProps) {
             : "w-auto sm:max-w-[95vw] max-h-[95vh] flex items-center justify-center",
         )}
       >
-        <DialogTitle className="sr-only">
-          {mediaTypes.image ? "Image" : "Media"} Preview
-        </DialogTitle>
+        <DialogTitle className="sr-only">Media Preview</DialogTitle>
         <DialogDescription className="sr-only">
-          The {mediaTypes.image ? "image" : "media"} preview will be displayed
-          here.
+          Preview of the selected media file
         </DialogDescription>
         {mediaContent}
       </DialogContent>
