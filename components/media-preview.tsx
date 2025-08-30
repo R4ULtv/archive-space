@@ -47,10 +47,10 @@ export function MediaPreview({ src, type }: MediaPreviewProps) {
       return (
         <Image
           src={src}
-          width={800}
-          height={600}
+          width={1200}
+          height={1200}
           alt="Preview"
-          className="object-contain"
+          className="max-w-full max-h-[90vh] w-auto h-auto object-contain"
           unoptimized
           priority
         />
@@ -114,7 +114,7 @@ export function MediaPreview({ src, type }: MediaPreviewProps) {
           "p-0 border-none overflow-hidden",
           mediaTypes.audio
             ? "sm:max-w-xl max-h-32"
-            : "w-auto sm:max-w-3xl max-h-[94vh]",
+            : "w-auto sm:max-w-[95vw] max-h-[95vh] flex items-center justify-center",
         )}
       >
         <DialogTitle className="sr-only">
