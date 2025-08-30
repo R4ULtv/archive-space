@@ -52,15 +52,16 @@ export default function UploadFiles({ basePath }: { basePath?: string }) {
   >(new Map());
 
   const calculateChunkSize = (fileSize: number): number => {
-    // Base chunk size on file size and connection speed
-    if (fileSize < 100 * 1024 * 1024) {
-      return Math.max(
-        5 * 1024 * 1024,
-        Math.min(100 * 1024 * 1024, fileSize / 4),
-      );
-    } else {
-      return Math.min(100 * 1024 * 1024, 50 * 1024 * 1024); // 50MB chunks
-    }
+    const MB = 1024 * 1024;
+    const thresholds = [10, 50, 200, 1024, 5120]; // in MB
+    const divisors = [2, 4, 6, 8, 10, 12];
+
+    const index = thresholds.findIndex(
+      (threshold) => fileSize < threshold * MB,
+    );
+    const divisor = divisors[index === -1 ? divisors.length - 1 : index];
+
+    return Math.floor(Math.max(5 * MB, Math.min(50 * MB, fileSize / divisor)));
   };
 
   // Helper function to calculate upload speed
@@ -233,7 +234,6 @@ export default function UploadFiles({ basePath }: { basePath?: string }) {
                 completed: true,
                 uploading: false,
                 progress: 100,
-                estimatedTimeRemaining: 0,
               }
             : status,
         ),
@@ -432,7 +432,7 @@ export default function UploadFiles({ basePath }: { basePath?: string }) {
                         size="icon"
                         variant="ghost"
                         className="text-muted-foreground/80 hover:text-foreground -me-2 size-8 hover:bg-transparent dark:hover:bg-transparent"
-                        onClick={() => removeFile(file.id)}
+                        onClick={() => handleFileRemoved(file.id)}
                         aria-label="Remove file"
                       >
                         <XIcon className="size-4" aria-hidden="true" />
