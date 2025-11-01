@@ -255,13 +255,15 @@ export default function FileList({ basePath }: { basePath?: string }) {
         />
       )}
       {folders &&
-        folders.map((folder) => (
-          <FolderItem
-            key={folder}
-            path={folder}
-            name={basePath ? folder.replace(`${basePath}/`, "") : folder}
-          />
-        ))}
+        folders.map((folder) => {
+          const folderName = basePath
+            ? folder.replace(`${basePath}/`, "")
+            : folder;
+          const folderPath = basePath ? `/${folder}` : `/${folder}`;
+          return (
+            <FolderItem key={folder} path={folderPath} name={folderName} />
+          );
+        })}
       {processedFiles.map((file) => (
         <FileItem
           key={file.key}
